@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#EDEFEC; --surface:#FFFFFF; --bg-warm:#FAF9F7;
+  --ink:#1C2220; --ink-soft:#5A6360; --muted:#8C9490;
+  --line:#E0E3DF; --accent:#F2785C; --accent-soft:#FDEDE8;
+  --shadow:0 2px 12px rgba(28,34,32,.05);
+  --shadow-float:0 8px 28px rgba(28,34,32,.12);
+}
+html,body{margin:0;padding:0}
+body{background:#EDEFEC;color:#1C2220;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:var(--ink);text-decoration:none}
+a:hover{color:var(--accent)}
+button,select,input,textarea{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes modalIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media (max-width:980px){
+  [data-nav]{display:none !important}
+  [data-layout]{grid-template-columns:1fr !important}
+  [data-side]{position:static !important}
+  [data-clinics]{grid-template-columns:1fr !important}
+}
+@media (max-width:640px){
+  [data-slots]{grid-template-columns:repeat(3,1fr) !important}
+  [data-hold]{flex-direction:column !important;align-items:flex-start !important;gap:12px !important}
+  [data-actions]{flex-direction:column !important;align-items:stretch !important}
+}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--bg)">
+
+  <header style="background:var(--bg-warm);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40">
+    <div style="max-width:1240px;margin:0 auto;padding:0 24px;height:74px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <a href="MediConnect Ana Səhifə.dc.html" style="font-size:19px;font-weight:700;letter-spacing:-0.02em;display:flex;align-items:baseline;gap:3px">mediconnect<span style="width:6px;height:6px;border-radius:999px;background:var(--accent);display:inline-block"></span></a>
+      <nav data-nav style="display:flex;align-items:center;gap:30px;font-size:14px;font-weight:500;color:var(--ink-soft)">
+        <a href="#" style="color:var(--ink-soft)">Necə işləyir</a>
+        <a href="MediConnect Həkim Axtarışı.dc.html" style="color:var(--ink-soft)">Həkimlər</a>
+        <a href="#" style="color:var(--ink-soft)">Klinikalar</a>
+        <a href="#" style="color:var(--ink-soft)">Suallar</a>
+      </nav>
+      <a href="#" style="font-size:14px;font-weight:600;color:var(--ink)">Daxil ol</a>
+    </div>
+  </header>
+
+  <sc-if value="{{ holdActive }}" hint-placeholder-val="{{ false }}">
+    <div style="position:sticky;top:74px;z-index:35;background:var(--accent-soft);border-bottom:1px solid var(--accent)">
+      <div data-hold style="max-width:1240px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px">
+        <div>
+          <div style="font-size:15px;font-weight:600">Seçdiyiniz vaxt sizin üçün saxlanılır</div>
+          <div style="font-size:13px;font-weight:500;color:var(--ink-soft);margin-top:2px">{{ holdSummary }}</div>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:10px">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:34px;font-weight:700;letter-spacing:-0.02em;color:var(--accent)">{{ holdClock }}</span>
+          <span style="font-size:13px;font-weight:500;color:var(--ink-soft)">qalıb</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <main style="max-width:1240px;margin:0 auto;padding:36px 24px 0">
+
+    <h1 style="margin:0 0 24px;font-size:34px;font-weight:700;letter-spacing:-0.02em">Randevu al</h1>
+
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px">
+      <sc-for list="{{ steps }}" as="st" hint-placeholder-count="3">
+        <button type="button" onClick="{{ st.onPick }}" style="{{ st.style }}">
+          <span style="{{ st.badgeStyle }}">{{ st.badge }}</span>
+          <span style="font-size:15px;font-weight:600">{{ st.label }}</span>
+        </button>
+      </sc-for>
+    </div>
+
+    <div data-layout style="display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start">
+
+      <div>
+
+        <sc-if value="{{ isStep1 }}" hint-placeholder-val="{{ true }}">
+          <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+            <h2 style="margin:0 0 4px;font-size:22px;font-weight:700">Klinikanı seçin</h2>
+            <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:var(--ink-soft)">Dr. Aygün Məmmədova iki klinikada qəbul edir. Boş saatlar klinikaya görə fərqlənir.</p>
+            <div data-clinics style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <sc-for list="{{ clinics }}" as="c" hint-placeholder-count="2">
+                <button type="button" onClick="{{ c.onPick }}" style="{{ c.style }}">
+                  <span style="font-size:16px;font-weight:600">{{ c.name }}</span>
+                  <span style="font-size:13px;font-weight:500;color:var(--ink-soft);line-height:1.5">{{ c.address }}</span>
+                  <span style="font-size:13px;font-weight:500;color:var(--muted)">{{ c.hours }}</span>
+                </button>
+              </sc-for>
+            </div>
+
+            <h2 style="margin:28px 0 14px;font-size:22px;font-weight:700">Xidməti seçin</h2>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ services }}" as="sv" hint-placeholder-count="4">
+                <button type="button" onClick="{{ sv.onPick }}" style="{{ sv.style }}">
+                  <span style="font-size:15px;font-weight:600">{{ sv.name }}</span>
+                  <span style="font-size:13px;font-weight:500;color:var(--muted);white-space:nowrap">{{ sv.duration }}</span>
+                </button>
+              </sc-for>
+            </div>
+
+            <div data-actions style="display:flex;align-items:center;gap:14px;margin-top:26px">
+              <button type="button" disabled="{{ step1Blocked }}" onClick="{{ onNext1 }}" style="{{ next1Style }}">Vaxt seçiminə keç<span style="width:32px;height:32px;flex:0 0 32px;border-radius:999px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:15px">→</span></button>
+              <span style="font-size:13px;font-weight:500;color:var(--muted)">{{ step1Hint }}</span>
+            </div>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ isStep2 }}" hint-placeholder-val="{{ false }}">
+          <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+            <h2 style="margin:0 0 4px;font-size:22px;font-weight:700">Vaxt seçin</h2>
+            <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:var(--ink-soft)">{{ step2Sub }}</p>
+
+            <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px">
+              <sc-for list="{{ days }}" as="d" hint-placeholder-count="7">
+                <button type="button" onClick="{{ d.onPick }}" style="{{ d.style }}">
+                  <span style="font-size:13px;font-weight:600">{{ d.weekday }}</span>
+                  <span style="font-size:13px;font-weight:500;opacity:.85">{{ d.date }}</span>
+                  <span style="font-size:13px;font-weight:500;opacity:.85">{{ d.free }}</span>
+                </button>
+              </sc-for>
+            </div>
+
+            <sc-if value="{{ hasTimes }}" hint-placeholder-val="{{ true }}">
+              <div data-slots style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:20px">
+                <sc-for list="{{ times }}" as="t" hint-placeholder-count="12">
+                  <button type="button" disabled="{{ t.disabled }}" onClick="{{ t.onPick }}" style="{{ t.style }}">{{ t.label }}</button>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ showPastNote }}" hint-placeholder-val="{{ false }}">
+              <p style="margin:14px 0 0;font-size:13px;font-weight:500;color:var(--muted)">Solğun saatlara yazılmaq olmur: randevuya 1 saatdan az qalıb.</p>
+            </sc-if>
+
+            <sc-if value="{{ noTimes }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:20px;border:1px solid var(--line);border-radius:14px;padding:20px">
+                <div style="font-size:16px;font-weight:600">Bu gün üçün boş saat yoxdur</div>
+                <p style="margin:8px 0 0;font-size:15px;line-height:1.6;color:var(--ink-soft)">{{ nextFreeText }}</p>
+                <sc-if value="{{ hasNextFree }}" hint-placeholder-val="{{ true }}">
+                  <button type="button" onClick="{{ onJumpNextFree }}" style="margin-top:16px;height:46px;padding:0 24px;border-radius:999px;background:var(--surface);border:1px solid var(--ink);color:var(--ink);font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="background:var(--ink);color:var(--bg-warm)">{{ nextFreeLabel }}</button>
+                </sc-if>
+              </div>
+            </sc-if>
+
+            <div data-actions style="display:flex;align-items:center;gap:14px;margin-top:26px">
+              <button type="button" disabled="{{ step2Blocked }}" onClick="{{ onNext2 }}" style="{{ next2Style }}">Təsdiqə keç<span style="width:32px;height:32px;flex:0 0 32px;border-radius:999px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:15px">→</span></button>
+              <button type="button" onClick="{{ onBack1 }}" style="background:none;border:none;padding:0;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer" style-hover="color:var(--accent)">Geri</button>
+            </div>
+          </section>
+        </sc-if>
+
+        <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
+          <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+            <h2 style="margin:0 0 18px;font-size:22px;font-weight:700">Randevunu təsdiqləyin</h2>
+
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ summary }}" as="row" hint-placeholder-count="7">
+                <div style="display:grid;grid-template-columns:150px 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--line)">
+                  <span style="font-size:13px;font-weight:600;color:var(--muted)">{{ row.k }}</span>
+                  <span style="font-size:15px;font-weight:500">{{ row.v }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="margin-top:18px;background:var(--accent-soft);border-radius:14px;padding:16px;font-size:15px;line-height:1.6">Müayinənin dəyəri klinikada ödənilir. Platformada ödəniş aparılmır.</div>
+
+            <div style="margin-top:26px">
+              <label style="display:block;font-size:16px;font-weight:600;margin-bottom:6px" for="note">Şikayət və ya qeyd</label>
+              <div style="font-size:13px;font-weight:500;color:var(--muted);margin-bottom:10px">Yalnız həkim görür.</div>
+              <textarea id="note" value="{{ note }}" onChange="{{ onNote }}" rows="4" maxLength="500" placeholder="Nə vaxtdan narahatsınız, hansı dərmanları qəbul edirsiniz?" style="width:100%;border:1px solid var(--line);border-radius:14px;padding:14px;font-size:15px;line-height:1.6;color:var(--ink);background:var(--surface);resize:vertical"></textarea>
+              <div style="font-size:13px;font-weight:500;color:var(--muted);margin-top:6px;text-align:right">{{ noteCount }}</div>
+            </div>
+
+            <div style="margin-top:22px">
+              <div style="font-size:16px;font-weight:600;margin-bottom:6px">Tibbi sənəd əlavə et</div>
+              <div style="font-size:13px;font-weight:500;color:var(--muted);margin-bottom:12px">Seçdiyiniz sənədlərə həkim üçün müvəqqəti giriş icazəsi yaradılır.</div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <sc-for list="{{ documents }}" as="doc" hint-placeholder-count="4">
+                  <label style="{{ doc.style }}">
+                    <input type="checkbox" checked="{{ doc.checked }}" onChange="{{ doc.onToggle }}" style="width:16px;height:16px;accent-color:#F2785C;cursor:pointer">
+                    <span style="flex:1;display:flex;flex-direction:column;gap:2px">
+                      <span style="font-size:15px;font-weight:600">{{ doc.name }}</span>
+                      <span style="font-size:13px;font-weight:500;color:var(--muted)">{{ doc.meta }}</span>
+                    </span>
+                  </label>
+                </sc-for>
+              </div>
+            </div>
+
+            <div data-actions style="display:flex;align-items:center;gap:18px;margin-top:28px">
+              <button type="button" onClick="{{ onConfirm }}" style="height:46px;padding:0 10px 0 24px;border-radius:999px;background:var(--accent);border:none;color:#FFFFFF;font-size:15px;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:14px;cursor:pointer" style-hover="filter:brightness(.94)">Randevunu təsdiqlə<span style="width:32px;height:32px;flex:0 0 32px;border-radius:999px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:15px">→</span></button>
+              <button type="button" onClick="{{ onCancel }}" style="background:none;border:none;padding:0;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer" style-hover="color:var(--accent)">İmtina et</button>
+            </div>
+          </section>
+        </sc-if>
+
+      </div>
+
+      <aside data-side style="position:sticky;top:98px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+        <div style="display:flex;gap:16px;align-items:center">
+          <div style="width:64px;height:64px;flex:0 0 64px;border-radius:999px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--ink-soft)">AM</div>
+          <div>
+            <div style="font-size:16px;font-weight:600">Dr. Aygün Məmmədova</div>
+            <div style="font-size:13px;font-weight:500;color:var(--muted);margin-top:4px">Kardioloq · 14 il təcrübə</div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:13px;font-weight:600;margin-top:6px"><span style="color:var(--accent)">★</span>4.9</div>
+          </div>
+        </div>
+        <div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ sidePicks }}" as="p" hint-placeholder-count="4">
+            <div style="display:flex;justify-content:space-between;gap:14px">
+              <span style="font-size:13px;font-weight:600;color:var(--muted)">{{ p.k }}</span>
+              <span style="font-size:13px;font-weight:600;text-align:right">{{ p.v }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <p style="margin:18px 0 0;font-size:13px;font-weight:500;color:var(--muted);line-height:1.6">Randevunu təsdiqləyəndən sonra nömrə SMS ilə göndərilir. Ləğv etmək pulsuzdur.</p>
+        <a href="MediConnect Həkim Profili.dc.html" style="display:inline-block;margin-top:14px;font-size:13px;font-weight:600;color:var(--accent)">Həkimin profili</a>
+      </aside>
+
+    </div>
+  </main>
+
+  <div style="height:88px"></div>
+
+  <sc-if value="{{ done }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:60;background:rgba(28,34,32,.45);display:flex;align-items:center;justify-content:center;padding:24px">
+      <div role="dialog" aria-modal="true" style="width:100%;max-width:520px;background:var(--surface);border-radius:18px;padding:28px;box-shadow:var(--shadow-float);animation:modalIn .18s ease-out">
+        <div style="font-size:13px;font-weight:600;color:var(--accent);letter-spacing:0.14em">RANDEVU TƏSDİQLƏNDİ</div>
+        <h2 style="margin:12px 0 18px;font-size:22px;font-weight:700">Randevu nömrəniz</h2>
+        <div style="background:var(--accent-soft);border-radius:14px;padding:22px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;letter-spacing:0.02em">{{ bookingCode }}</div>
+        <div style="display:flex;flex-direction:column;margin-top:20px">
+          <sc-for list="{{ doneSummary }}" as="row" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:130px 1fr;gap:14px;padding:10px 0;border-top:1px solid var(--line)">
+              <span style="font-size:13px;font-weight:600;color:var(--muted)">{{ row.k }}</span>
+              <span style="font-size:15px;font-weight:500">{{ row.v }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <p style="margin:16px 0 0;font-size:13px;font-weight:500;color:var(--ink-soft)">24 saat və 2 saat əvvələ xatırlatma planlaşdırıldı.</p>
+        <div data-actions style="display:flex;align-items:center;gap:12px;margin-top:24px">
+          <button type="button" onClick="{{ onClose }}" style="height:46px;padding:0 10px 0 24px;border-radius:999px;background:var(--accent);border:none;color:#FFFFFF;font-size:15px;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:14px;cursor:pointer" style-hover="filter:brightness(.94)">Randevularıma bax<span style="width:32px;height:32px;flex:0 0 32px;border-radius:999px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:15px">→</span></button>
+          <button type="button" onClick="{{ onCalendar }}" style="height:46px;padding:0 24px;border-radius:999px;background:var(--surface);border:1px solid var(--ink);color:var(--ink);font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="background:var(--ink);color:var(--bg-warm)">Təqvimə əlavə et</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="position:fixed;right:24px;bottom:24px;z-index:70;display:flex;flex-direction:column;gap:10px;align-items:flex-end;pointer-events:none">
+    <sc-for list="{{ toasts }}" as="t" hint-placeholder-count="0">
+      <div style="{{ t.style }}">
+        <div style="font-size:15px;font-weight:600">{{ t.title }}</div>
+        <div style="font-size:13px;font-weight:500;color:var(--ink-soft);margin-top:4px;line-height:1.5">{{ t.body }}</div>
+      </div>
+    </sc-for>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240}}">
+const WD = ['B.','B.e.','Ç.a.','Ç.','C.a.','C.','Ş.'];
+const MONTHS = ['yanvar','fevral','mart','aprel','may','iyun','iyul','avqust','sentyabr','oktyabr','noyabr','dekabr'];
+const MSHORT = ['yan','fev','mar','apr','may','iyn','iyl','avq','sen','okt','noy','dek'];
+const CLINICS = [
+  {id:'mk', name:'Mərkəzi Klinika', address:'Bakı, Nəsimi r., Azadlıq pr. 24', hours:'B.e. — C. 09:00 — 18:00', open:[1,2,3,4,5], from:9, to:18, auto:true},
+  {id:'kt', name:'Kaspi Tibb Mərkəzi', address:'Bakı, Yasamal r., Şərifzadə küç. 7', hours:'Ç.a. və C.a. 14:00 — 19:00', open:[2,5], from:14, to:19, auto:false}
+];
+const SERVICES = [
+  {id:'ilk', name:'İlkin müayinə', min:30},
+  {id:'tek', name:'Təkrar müayinə', min:20},
+  {id:'exo', name:'Exokardioqrafiya', min:40},
+  {id:'hol', name:'Holter monitorinqinin qurulması', min:25}
+];
+const DOCS = [
+  {id:'d1', name:'Qan analizi', meta:'PDF · 12 avqust 2026'},
+  {id:'d2', name:'EKQ nəticəsi', meta:'PDF · 2 sentyabr 2026'},
+  {id:'d3', name:'Exokardioqrafiya protokolu', meta:'PDF · 14 iyul 2026'},
+  {id:'d4', name:'Dərman siyahısı', meta:'Qeyd · 1 sentyabr 2026'}
+];
+const HOLD_SECONDS = 600;
+
+class Component extends DCLogic {
+  state = {
+    step:1, clinic:null, service:null, dayIndex:0, time:null,
+    hold:0, note:'', docs:[], done:false, code:'', toasts:[],
+    booked:[]
+  };
+
+  componentDidMount(){
+    this._now = new Date();
+    this.setState({booked:[this.keyFor(2, '11:00')]});
+    this._tick = setInterval(() => {
+      if (this.state.hold > 0){
+        const next = this.state.hold - 1;
+        if (next === 0){
+          this.setState({hold:0, time:null});
+          this.toast('Vaxt bitdi — yenidən seçin', 'Saxlanan vaxt sərbəst buraxıldı. Cədvəldən yeni saat seçin.');
+        } else this.setState({hold:next});
+      }
+    }, 1000);
+  }
+  componentWillUnmount(){ clearInterval(this._tick); this.setState({toasts:[]}); }
+
+  toast(title, body){
+    const id = Date.now() + Math.random();
+    this.setState(s => ({toasts:s.toasts.concat([{id, title, body}])}));
+    setTimeout(() => this.setState(s => ({toasts:s.toasts.filter(t => t.id !== id)})), 4000);
+  }
+
+  days(){
+    const base = this._now || new Date();
+    const out = [];
+    for (let i = 0; i < 7; i++){
+      const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + i);
+      out.push({i, d, dow:d.getDay(), weekday:i === 0 ? 'Bu gün' : i === 1 ? 'Sabah' : WD[d.getDay()],
+        date:d.getDate() + ' ' + MSHORT[d.getMonth()], long:d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear()});
+    }
+    return out;
+  }
+  keyFor(i, t){ return i + '|' + t; }
+
+  slotsFor(day){
+    const c = CLINICS.find(x => x.id === this.state.clinic) || CLINICS[0];
+    if (!c.open.includes(day.dow)) return [];
+    const now = this._now || new Date();
+    const out = [];
+    for (let h = c.from; h < c.to; h++){
+      [0, 30].forEach(m => {
+        const label = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
+        const taken = (h * 2 + m / 30 + day.i * 3 + (c.id === 'kt' ? 1 : 0)) % 3 === 0;
+        const slotAt = new Date(day.d.getFullYear(), day.d.getMonth(), day.d.getDate(), h, m);
+        const tooSoon = day.i === 0 && (slotAt - now) < 3600000;
+        out.push({label, taken, tooSoon, free: !taken && !tooSoon});
+      });
+    }
+    return out;
+  }
+
+  pillDay(active){
+    return 'flex:0 0 auto;display:flex;flex-direction:column;gap:2px;align-items:flex-start;text-align:left;padding:10px 14px;border-radius:16px;cursor:pointer;white-space:nowrap;border:1px solid '
+      + (active ? 'var(--accent)' : 'var(--line)')
+      + ';background:' + (active ? 'var(--accent)' : 'var(--surface)')
+      + ';color:' + (active ? '#FFFFFF' : 'var(--ink)');
+  }
+  cta(enabled){
+    return 'height:46px;padding:0 10px 0 24px;border-radius:999px;border:none;font-size:15px;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:14px;background:var(--accent);color:#FFFFFF;opacity:'
+      + (enabled ? '1' : '.45') + ';cursor:' + (enabled ? 'pointer' : 'not-allowed');
+  }
+
+  pickTime(label){
+    this.setState({time:label, hold:HOLD_SECONDS});
+  }
+
+  confirm(){
+    const s = this.state;
+    if (!s.time || s.hold <= 0){
+      this.toast('Vaxt bitdi — yenidən seçin', 'Saxlama müddəti bitdiyi üçün randevu təsdiqlənmədi. Cədvəldən yeni saat seçin.');
+      this.setState({step:2, time:null, hold:0});
+      return;
+    }
+    const day = this.days()[s.dayIndex];
+    if (s.booked.some(k => k.split('|')[0] === String(s.dayIndex))){
+      this.toast('Bu gün üçün artıq randevunuz var', 'Dr. Aygün Məmmədova ilə ' + day.long + ' tarixinə bir randevu qeydə alınıb. Başqa gün seçin və ya mövcud randevunu dəyişin.');
+      return;
+    }
+    const d = day.d;
+    const code = 'MC-' + d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2,'0') + String(d.getDate()).padStart(2,'0') + '-' + String(1000 + Math.floor(Math.random() * 8999));
+    this.setState(st => ({done:true, code, hold:0, booked:st.booked.concat([this.keyFor(st.dayIndex, st.time)])}));
+  }
+
+  reset(){
+    this.setState({step:1, clinic:null, service:null, time:null, hold:0, note:'', docs:[], done:false});
+  }
+
+  renderVals(){
+    const s = this.state;
+    const days = this.days();
+    const day = days[s.dayIndex];
+    const clinic = CLINICS.find(c => c.id === s.clinic);
+    const service = SERVICES.find(x => x.id === s.service);
+    const slots = clinic ? this.slotsFor(day) : [];
+    const mm = Math.floor(s.hold / 60), ss = s.hold % 60;
+    const nextFree = days.find(d => d.i > s.dayIndex && this.slotsFor(d).some(x => x.free));
+
+    const stepDefs = [
+      {n:1, label:'Klinika və xidmət'},
+      {n:2, label:'Vaxt'},
+      {n:3, label:'Təsdiq'}
+    ];
+
+    return {
+      steps: stepDefs.map(d => {
+        const active = s.step === d.n, past = s.step > d.n;
+        return {
+          label:d.label, badge: past ? '✓' : String(d.n),
+          style:'display:flex;align-items:center;gap:10px;padding:10px 18px 10px 10px;border-radius:999px;cursor:pointer;background:var(--surface);border:1px solid '
+            + (active ? 'var(--accent)' : 'var(--line)') + ';color:var(--ink)',
+          badgeStyle:'width:28px;height:28px;flex:0 0 28px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;background:'
+            + (active || past ? 'var(--accent)' : 'var(--bg)') + ';color:' + (active || past ? '#FFFFFF' : 'var(--muted)'),
+          onPick: () => { if (past) this.setState({step:d.n}); }
+        };
+      }),
+
+      isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3,
+
+      clinics: CLINICS.map(c => ({
+        name:c.name, address:c.address, hours:c.hours,
+        style:'display:flex;flex-direction:column;gap:6px;text-align:left;padding:20px;border-radius:18px;cursor:pointer;background:var(--surface);border:'
+          + (s.clinic === c.id ? '2px solid var(--accent)' : '1px solid var(--line)'),
+        onPick: () => this.setState({clinic:c.id, time:null, hold:0})
+      })),
+      services: SERVICES.map(sv => ({
+        name:sv.name, duration:sv.min + ' dəqiqə',
+        style:'display:flex;align-items:center;justify-content:space-between;gap:16px;text-align:left;padding:16px 18px;border-radius:14px;cursor:pointer;background:var(--surface);border:'
+          + (s.service === sv.id ? '2px solid var(--accent)' : '1px solid var(--line)'),
+        onPick: () => this.setState({service:sv.id})
+      })),
+      step1Blocked: !(s.clinic && s.service),
+      next1Style: this.cta(!!(s.clinic && s.service)),
+      step1Hint: s.clinic && s.service ? '' : 'Klinika və xidməti seçin.',
+      onNext1: () => { if (s.clinic && s.service) this.setState({step:2}); },
+
+      step2Sub: clinic ? clinic.name + ' · ' + (service ? service.name + ' · ' + service.min + ' dəqiqə' : '') : '',
+      days: days.map(d => {
+        const free = clinic ? this.slotsFor(d).filter(x => x.free).length : 0;
+        return {weekday:d.weekday, date:d.date, free: free ? free + ' boş yer' : 'boş yer yoxdur',
+          style:this.pillDay(s.dayIndex === d.i),
+          onPick: () => this.setState({dayIndex:d.i, time:null, hold:0})};
+      }),
+      hasTimes: slots.length > 0,
+      noTimes: slots.length === 0 || slots.every(x => !x.free),
+      showPastNote: slots.some(x => x.tooSoon),
+      times: slots.map(t => ({
+        label:t.label, disabled: !t.free,
+        style:'height:42px;border-radius:12px;font-size:13px;font-weight:600;white-space:nowrap;border:1px solid '
+          + (s.time === t.label ? 'var(--accent)' : 'var(--line)')
+          + ';background:' + (!t.free ? 'var(--bg)' : s.time === t.label ? 'var(--accent-soft)' : 'var(--surface)')
+          + ';color:' + (!t.free ? 'var(--muted)' : 'var(--ink)')
+          + ';cursor:' + (t.free ? 'pointer' : 'not-allowed'),
+        onPick: t.free ? () => this.pickTime(t.label) : undefined
+      })),
+      nextFreeText: nextFree ? 'Ən yaxın boş tarix: ' + nextFree.long + '.' : 'Bu klinikada yeddi gün ərzində boş yer qalmayıb. Digər klinikanı seçin.',
+      hasNextFree: !!nextFree,
+      nextFreeLabel: nextFree ? nextFree.date + ' tarixinə keç' : '',
+      onJumpNextFree: () => { if (nextFree) this.setState({dayIndex:nextFree.i, time:null, hold:0}); },
+      step2Blocked: !s.time,
+      next2Style: this.cta(!!s.time),
+      onNext2: () => { if (s.time) this.setState({step:3}); },
+      onBack1: () => this.setState({step:1}),
+
+      holdActive: s.hold > 0,
+      holdClock: String(mm).padStart(2,'0') + ':' + String(ss).padStart(2,'0'),
+      holdSummary: (clinic ? clinic.name + ' · ' : '') + (day ? day.long : '') + (s.time ? ', ' + s.time : ''),
+
+      summary: [
+        {k:'Həkim', v:'Dr. Aygün Məmmədova, kardioloq'},
+        {k:'Klinika', v:clinic ? clinic.name : '—'},
+        {k:'Ünvan', v:clinic ? clinic.address : '—'},
+        {k:'Tarix', v:day ? day.long : '—'},
+        {k:'Saat', v:s.time || '—'},
+        {k:'Xidmət', v:service ? service.name + ' · ' + service.min + ' dəqiqə' : '—'},
+        {k:'Təsdiq rejimi', v:clinic && clinic.auto ? 'Avtomatik təsdiq' : 'Həkimin təsdiqi gözlənilir'}
+      ],
+      note:s.note,
+      noteCount: s.note.length + ' / 500',
+      onNote: e => this.setState({note:e.target.value.slice(0, 500)}),
+      documents: DOCS.map(d => ({
+        name:d.name, meta:d.meta, checked:s.docs.includes(d.id),
+        style:'display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;cursor:pointer;background:var(--surface);border:'
+          + (s.docs.includes(d.id) ? '2px solid var(--accent)' : '1px solid var(--line)'),
+        onToggle: () => this.setState(st => ({docs: st.docs.includes(d.id) ? st.docs.filter(x => x !== d.id) : st.docs.concat([d.id])}))
+      })),
+      onConfirm: () => this.confirm(),
+      onCancel: () => { this.reset(); this.toast('Randevu ləğv edildi', 'Saxlanan vaxt sərbəst buraxıldı.'); },
+
+      sidePicks: [
+        {k:'Klinika', v:clinic ? clinic.name : 'Seçilməyib'},
+        {k:'Xidmət', v:service ? service.name : 'Seçilməyib'},
+        {k:'Tarix', v:day ? day.date : '—'},
+        {k:'Saat', v:s.time || 'Seçilməyib'}
+      ],
+
+      done:s.done,
+      bookingCode:s.code,
+      doneSummary: [
+        {k:'Həkim', v:'Dr. Aygün Məmmədova'},
+        {k:'Klinika', v:clinic ? clinic.name : '—'},
+        {k:'Tarix', v:day ? day.long : '—'},
+        {k:'Saat', v:s.time || '—'},
+        {k:'Xidmət', v:service ? service.name + ' · ' + service.min + ' dəqiqə' : '—'}
+      ],
+      onClose: () => { this.setState({done:false, step:1, time:null, service:null, clinic:null, note:'', docs:[]}); },
+      onCalendar: () => this.toast('Təqvim faylı hazırdır', 'Randevu .ics faylı kimi yükləndi.'),
+
+      toasts: s.toasts.map(t => ({
+        title:t.title, body:t.body,
+        style:'pointer-events:auto;width:300px;background:var(--surface);border:1px solid var(--accent);border-radius:14px;padding:16px;box-shadow:var(--shadow-float);animation:toastIn .18s ease-out'
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

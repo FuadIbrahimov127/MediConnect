@@ -1,0 +1,62 @@
+/* Dev panel — məhsul UI-dan aydın fərqlənsin deyə tünd fon + "DEV" etiketi. */
+
+.fab {
+  position: fixed; left: 20px; bottom: 20px; z-index: 900;
+  height: 44px; padding: 0 16px 0 12px; border-radius: 999px; border: none; cursor: pointer;
+  background: #1C2220; color: #EDEFEC; font-size: 13px; font-weight: 700;
+  display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 8px 28px rgba(0, 0, 0, .25);
+}
+.fab:hover { background: #2C3432; }
+.tag { background: var(--accent); color: #fff; border-radius: 6px; padding: 2px 6px; font-size: 11px; letter-spacing: .06em; }
+
+.panel {
+  position: fixed; left: 20px; bottom: 76px; z-index: 900;
+  width: min(440px, calc(100vw - 40px)); max-height: min(640px, calc(100vh - 100px));
+  background: #171D1B; color: #EDEFEC; border: 1px solid #2C3432; border-radius: 18px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, .35); display: flex; flex-direction: column; overflow: hidden;
+  font-size: 13px; animation: mc-in .15s ease-out;
+}
+/* Başlıq və tab-lar sıxılmamalıdır — siyahı uzun olanda yalnız .body sürüşür. */
+.head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #2C3432; flex-shrink: 0; }
+.headTitle { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; }
+.clock { font-family: var(--font-mono); font-size: 12px; color: #AEB5B1; }
+.tabs { display: flex; gap: 4px; padding: 8px; border-bottom: 1px solid #2C3432; overflow-x: auto; scrollbar-width: none; flex-shrink: 0; }
+.tab {
+  background: none; border: 1px solid transparent; color: #AEB5B1; border-radius: 999px; padding: 6px 12px;
+  font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.tab:hover { color: #EDEFEC; }
+.tabActive { background: #2C3432; color: #EDEFEC; border-color: #3A4441; }
+.body { padding: 14px 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0; }
+/* Siyahı elementləri də sıxılmasın (flex sütununda kartlar üst-üstə düşməsin). */
+.body > * { flex-shrink: 0; }
+
+.row {
+  background: #1C2220; border: 1px solid #2C3432; border-radius: 12px; padding: 10px 12px;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.rowMain { min-width: 0; }
+.rowTitle { font-weight: 700; color: #EDEFEC; }
+.rowSub { color: #8C9490; margin-top: 2px; overflow-wrap: anywhere; }
+.rowBody { color: #C9CFCB; margin-top: 4px; line-height: 1.45; overflow-wrap: anywhere; }
+.code { font-family: var(--font-mono); font-size: 18px; color: var(--accent); letter-spacing: .12em; }
+.role { font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--accent); text-transform: uppercase; }
+
+.btn {
+  background: #2C3432; color: #EDEFEC; border: 1px solid #3A4441; border-radius: 999px;
+  padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.btn:hover { background: #3A4441; }
+.btnAccent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btnAccent:hover { filter: brightness(.94); background: var(--accent); }
+.btnDanger { border-color: #C4453A; color: #F4A79E; }
+.btnRow { display: flex; flex-wrap: wrap; gap: 6px; }
+.hint { color: #8C9490; line-height: 1.5; }
+.status { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #2C3432; color: #AEB5B1; }
+.statusOk { background: #16261F; color: #6FCBAA; }
+.statusBad { background: #2C1A18; color: #F4A79E; }
+.seg { display: inline-flex; border: 1px solid #3A4441; border-radius: 999px; overflow: hidden; }
+.seg button { background: none; border: none; color: #AEB5B1; padding: 5px 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+.seg button[aria-pressed='true'] { background: #3A4441; color: #EDEFEC; }
+
+@media print { .fab, .panel { display: none !important; } }

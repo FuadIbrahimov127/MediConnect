@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#EDEFEC; --surface:#FFFFFF; --bg-warm:#FAF9F7;
+  --ink:#1C2220; --ink-soft:#5A6360; --muted:#8C9490;
+  --line:#E0E3DF; --accent:#F2785C; --accent-soft:#FDEDE8;
+  --shadow:0 2px 12px rgba(28,34,32,.05);
+}
+html,body{margin:0;padding:0}
+body{background:#EDEFEC;color:#1C2220;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:var(--ink);text-decoration:none}
+a:hover{color:var(--accent)}
+button,select,input{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+@media (max-width:980px){
+  [data-nav]{display:none !important}
+  [data-layout]{grid-template-columns:1fr !important}
+  [data-side]{position:static !important}
+  [data-foot]{grid-template-columns:1fr 1fr !important}
+}
+@media (max-width:640px){
+  [data-head]{grid-template-columns:1fr !important}
+  [data-slots]{grid-template-columns:repeat(2,1fr) !important}
+  [data-foot]{grid-template-columns:1fr !important}
+}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--bg)">
+
+  <header style="background:var(--bg-warm);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30">
+    <div style="max-width:1240px;margin:0 auto;padding:0 24px;height:74px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <a href="MediConnect Ana Səhifə.dc.html" style="font-size:19px;font-weight:700;letter-spacing:-0.02em;display:flex;align-items:baseline;gap:3px">mediconnect<span style="width:6px;height:6px;border-radius:999px;background:var(--accent);display:inline-block"></span></a>
+      <nav data-nav style="display:flex;align-items:center;gap:30px;font-size:14px;font-weight:500;color:var(--ink-soft)">
+        <a href="#" style="color:var(--ink-soft)">Necə işləyir</a>
+        <a href="MediConnect Həkim Axtarışı.dc.html" style="color:var(--accent);font-weight:600">Həkimlər</a>
+        <a href="#" style="color:var(--ink-soft)">Klinikalar</a>
+        <a href="#" style="color:var(--ink-soft)">Suallar</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:18px">
+        <a href="#" style="font-size:14px;font-weight:600;color:var(--ink)">Daxil ol</a>
+        <button type="button" style="height:46px;padding:0 24px;border-radius:999px;background:var(--surface);border:1px solid var(--ink);color:var(--ink);font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="background:var(--ink);color:var(--bg-warm)">Randevu al</button>
+      </div>
+    </div>
+  </header>
+
+  <main style="max-width:1240px;margin:0 auto;padding:28px 24px 0">
+
+    <div style="font-size:13px;font-weight:500;color:var(--muted);margin-bottom:18px">
+      <a href="MediConnect Həkim Axtarışı.dc.html" style="color:var(--muted)">Həkimlər</a> · Kardioloq · Dr. Aygün Məmmədova
+    </div>
+
+    <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+      <div data-head style="display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start">
+        <div style="display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap">
+          <div style="width:96px;height:96px;flex:0 0 96px;border-radius:999px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--ink-soft)">AM</div>
+          <div>
+            <h1 style="margin:0;font-size:34px;font-weight:700;letter-spacing:-0.02em">Dr. Aygün Məmmədova</h1>
+            <div style="font-size:15px;font-weight:500;color:var(--ink-soft);margin-top:6px">Kardioloq · Tibb üzrə fəlsəfə doktoru</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;margin-top:12px"><span style="color:var(--accent)">★</span>4.9<span style="font-weight:500;color:var(--muted)">· 132 rəy · 14 il təcrübə</span></div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:14px">
+              <span style="border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:13px;font-weight:500;color:var(--ink-soft)">Azərbaycanca</span>
+              <span style="border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:13px;font-weight:500;color:var(--ink-soft)">Rusca</span>
+              <span style="border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:13px;font-weight:500;color:var(--ink-soft)">İngiliscə</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:12px">
+          <button type="button" onClick="{{ onBook }}" style="height:46px;padding:0 10px 0 24px;border-radius:999px;background:var(--accent);border:none;color:#FFFFFF;font-size:15px;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:14px;cursor:pointer" style-hover="filter:brightness(.94)">Randevu al<span style="width:32px;height:32px;flex:0 0 32px;border-radius:999px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:15px">→</span></button>
+          <button type="button" onClick="{{ onFav }}" style="background:none;border:none;padding:0;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer" style-hover="color:var(--accent)">{{ favLabel }}</button>
+        </div>
+      </div>
+    </section>
+
+    <div data-layout style="display:grid;grid-template-columns:65fr 35fr;gap:24px;margin-top:24px;align-items:start">
+
+      <div style="display:flex;flex-direction:column;gap:24px">
+
+        <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+          <h2 style="margin:0 0 14px;font-size:22px;font-weight:700">Haqqında</h2>
+          <p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:70ch">Dr. Aygün Məmmədova 2011-ci ildən kardioloq kimi çalışır. Əsas iş sahəsi arterial hipertenziya, ürək ritmi pozğunluqları və ürək çatışmazlığının ambulator müalicəsidir.</p>
+          <p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:70ch">Müayinədə exokardioqrafiya və Holter monitorinqinin nəticələrini özü qiymətləndirir. Pasientin dərman siyahısını hər vizitdə yenidən nəzərdən keçirir və dozanı laborator göstəricilərə uyğun tənzimləyir.</p>
+          <p style="margin:0;font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:70ch">Türkiyə və Almaniyada kardiologiya üzrə təkmilləşdirmə kurslarını bitirib. Azərbaycan Kardiologiya Cəmiyyətinin üzvüdür.</p>
+        </section>
+
+        <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+          <h2 style="margin:0 0 16px;font-size:22px;font-weight:700">Təhsil və təcrübə</h2>
+          <div style="display:flex;flex-direction:column">
+            <div style="display:grid;grid-template-columns:110px 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--line)">
+              <span style="font-size:13px;font-weight:600;color:var(--muted)">2003 — 2009</span>
+              <span style="font-size:15px;font-weight:500">Azərbaycan Tibb Universiteti, müalicə işi</span>
+            </div>
+            <div style="display:grid;grid-template-columns:110px 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--line)">
+              <span style="font-size:13px;font-weight:600;color:var(--muted)">2009 — 2011</span>
+              <span style="font-size:15px;font-weight:500">Rezidentura, kardiologiya — Elmi-Tədqiqat Terapiya İnstitutu</span>
+            </div>
+            <div style="display:grid;grid-template-columns:110px 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--line)">
+              <span style="font-size:13px;font-weight:600;color:var(--muted)">2011 — 2016</span>
+              <span style="font-size:15px;font-weight:500">Kardioloq — Kaspi Tibb Mərkəzi</span>
+            </div>
+            <div style="display:grid;grid-template-columns:110px 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--line)">
+              <span style="font-size:13px;font-weight:600;color:var(--muted)">2016 — indi</span>
+              <span style="font-size:15px;font-weight:500">Baş kardioloq — Mərkəzi Klinika</span>
+            </div>
+            <div style="display:grid;grid-template-columns:110px 1fr;gap:16px;padding:12px 0;border-top:1px solid var(--line)">
+              <span style="font-size:13px;font-weight:600;color:var(--muted)">2018</span>
+              <span style="font-size:15px;font-weight:500">Tibb üzrə fəlsəfə doktoru dissertasiyası</span>
+            </div>
+          </div>
+        </section>
+
+        <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+          <h2 style="margin:0 0 16px;font-size:22px;font-weight:700">İxtisaslaşma sahələri</h2>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <span style="border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:500;color:var(--ink-soft)">Arterial hipertenziya</span>
+            <span style="border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:500;color:var(--ink-soft)">Ürək ritmi pozğunluqları</span>
+            <span style="border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:500;color:var(--ink-soft)">Ürək çatışmazlığı</span>
+            <span style="border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:500;color:var(--ink-soft)">Exokardioqrafiya</span>
+            <span style="border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:500;color:var(--ink-soft)">Holter monitorinqi</span>
+            <span style="border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:500;color:var(--ink-soft)">Xolesterin idarəsi</span>
+            <span style="border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:500;color:var(--ink-soft)">Əməliyyatönü qiymətləndirmə</span>
+          </div>
+        </section>
+
+        <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+          <h2 style="margin:0 0 6px;font-size:22px;font-weight:700">Xidmətlər</h2>
+
+          <div style="margin-top:18px;padding-top:18px;border-top:1px solid var(--line)">
+            <h3 style="margin:0 0 4px;font-size:16px;font-weight:600">Mərkəzi Klinika</h3>
+            <div style="font-size:13px;font-weight:500;color:var(--muted)">Bakı, Nəsimi r., Azadlıq pr. 24</div>
+            <div style="display:flex;flex-direction:column;margin-top:14px">
+              <div style="display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-top:1px solid var(--line);font-size:15px;font-weight:500"><span>İlkin müayinə</span><span style="color:var(--muted);font-size:13px;font-weight:500;white-space:nowrap">30 dəqiqə</span></div>
+              <div style="display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-top:1px solid var(--line);font-size:15px;font-weight:500"><span>Təkrar müayinə</span><span style="color:var(--muted);font-size:13px;font-weight:500;white-space:nowrap">20 dəqiqə</span></div>
+              <div style="display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-top:1px solid var(--line);font-size:15px;font-weight:500"><span>Exokardioqrafiya</span><span style="color:var(--muted);font-size:13px;font-weight:500;white-space:nowrap">40 dəqiqə</span></div>
+              <div style="display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-top:1px solid var(--line);font-size:15px;font-weight:500"><span>Holter monitorinqinin qurulması</span><span style="color:var(--muted);font-size:13px;font-weight:500;white-space:nowrap">25 dəqiqə</span></div>
+            </div>
+            <p style="margin:14px 0 0;font-size:13px;font-weight:500;color:var(--muted)">Müayinənin dəyəri klinikada müəyyən edilir.</p>
+          </div>
+
+          <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--line)">
+            <h3 style="margin:0 0 4px;font-size:16px;font-weight:600">Kaspi Tibb Mərkəzi</h3>
+            <div style="font-size:13px;font-weight:500;color:var(--muted)">Bakı, Yasamal r., Şərifzadə küç. 7</div>
+            <div style="display:flex;flex-direction:column;margin-top:14px">
+              <div style="display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-top:1px solid var(--line);font-size:15px;font-weight:500"><span>İlkin müayinə</span><span style="color:var(--muted);font-size:13px;font-weight:500;white-space:nowrap">30 dəqiqə</span></div>
+              <div style="display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-top:1px solid var(--line);font-size:15px;font-weight:500"><span>Əməliyyatönü kardioloji rəy</span><span style="color:var(--muted);font-size:13px;font-weight:500;white-space:nowrap">45 dəqiqə</span></div>
+              <div style="display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-top:1px solid var(--line);font-size:15px;font-weight:500"><span>Nəticələrin şərhi</span><span style="color:var(--muted);font-size:13px;font-weight:500;white-space:nowrap">15 dəqiqə</span></div>
+            </div>
+            <p style="margin:14px 0 0;font-size:13px;font-weight:500;color:var(--muted)">Müayinənin dəyəri klinikada müəyyən edilir.</p>
+          </div>
+        </section>
+
+        <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+          <h2 style="margin:0 0 18px;font-size:22px;font-weight:700">Pasient rəyləri</h2>
+
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;padding-bottom:20px;border-bottom:1px solid var(--line)">
+            <div>
+              <div style="font-size:52px;font-weight:800;letter-spacing:-0.03em;line-height:1">4.9</div>
+              <div style="font-size:13px;font-weight:500;color:var(--muted);margin-top:8px">132 rəy</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ distribution }}" as="row" hint-placeholder-count="5">
+                <div style="display:grid;grid-template-columns:52px 1fr 40px;gap:12px;align-items:center">
+                  <span style="font-size:13px;font-weight:500;color:var(--ink-soft)">{{ row.stars }}</span>
+                  <span style="height:8px;border-radius:999px;background:var(--accent-soft);display:block;overflow:hidden"><span style="{{ row.barStyle }}"></span></span>
+                  <span style="font-size:13px;font-weight:500;color:var(--muted);text-align:right">{{ row.count }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column">
+            <div style="padding:20px 0;border-bottom:1px solid var(--line)">
+              <div style="color:var(--accent);font-size:14px;letter-spacing:2px">★★★★★</div>
+              <p style="margin:12px 0 0;font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:70ch">Müayinə vaxtında başladı. Bütün analizlərimi sətir-sətir izah etdi, dərman dozasını dəyişdi və nə üçün dəyişdiyini yazılı verdi.</p>
+              <div style="margin-top:12px;font-size:13px;font-weight:600">Nigar S. <span style="font-weight:500;color:var(--muted)">· 4 sentyabr 2026</span></div>
+            </div>
+            <div style="padding:20px 0;border-bottom:1px solid var(--line)">
+              <div style="color:var(--accent);font-size:14px;letter-spacing:2px">★★★★★</div>
+              <p style="margin:12px 0 0;font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:70ch">Atamı Holter monitorinqinə yazdırdıq. Nəticəni iki gün sonra özü zəng edib izah etdi.</p>
+              <div style="margin-top:12px;font-size:13px;font-weight:600">Elçin M. <span style="font-weight:500;color:var(--muted)">· 28 avqust 2026</span></div>
+            </div>
+            <div style="padding:20px 0">
+              <div style="color:var(--accent);font-size:14px;letter-spacing:2px">★★★★<span style="color:var(--line)">★</span></div>
+              <p style="margin:12px 0 0;font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:70ch">Həkimdən razıyam, amma qeydiyyatda 15 dəqiqə gözlədim. Müayinənin özü isə tələsik keçmədi.</p>
+              <div style="margin-top:12px;font-size:13px;font-weight:600">Səbinə A. <span style="font-weight:500;color:var(--muted)">· 19 avqust 2026</span></div>
+            </div>
+          </div>
+          <a href="#" style="display:inline-block;margin-top:8px;font-size:13px;font-weight:600;color:var(--accent)">Bütün 132 rəyə bax</a>
+        </section>
+
+      </div>
+
+      <div data-side style="position:sticky;top:98px;display:flex;flex-direction:column;gap:24px">
+
+        <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+          <h2 style="margin:0 0 16px;font-size:22px;font-weight:700">İşlədiyi klinikalar</h2>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="border:1px solid var(--line);border-radius:14px;padding:16px">
+              <h3 style="margin:0;font-size:16px;font-weight:600">Mərkəzi Klinika</h3>
+              <div style="font-size:13px;font-weight:500;color:var(--ink-soft);margin-top:8px;line-height:1.5">Bakı, Nəsimi r., Azadlıq pr. 24<br>B.e. — C. 09:00 — 18:00</div>
+              <div style="display:flex;align-items:center;gap:14px;margin-top:12px;flex-wrap:wrap">
+                <a href="tel:+994122001010" style="font-size:13px;font-weight:600">+994 12 200 10 10</a>
+                <a href="#" style="font-size:13px;font-weight:600;color:var(--accent)">Xəritədə göstər</a>
+              </div>
+            </div>
+            <div style="border:1px solid var(--line);border-radius:14px;padding:16px">
+              <h3 style="margin:0;font-size:16px;font-weight:600">Kaspi Tibb Mərkəzi</h3>
+              <div style="font-size:13px;font-weight:500;color:var(--ink-soft);margin-top:8px;line-height:1.5">Bakı, Yasamal r., Şərifzadə küç. 7<br>Ç.a. və C.a. 14:00 — 19:00</div>
+              <div style="display:flex;align-items:center;gap:14px;margin-top:12px;flex-wrap:wrap">
+                <a href="tel:+994124404040" style="font-size:13px;font-weight:600">+994 12 440 40 40</a>
+                <a href="#" style="font-size:13px;font-weight:600;color:var(--accent)">Xəritədə göstər</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+          <h2 style="margin:0 0 16px;font-size:22px;font-weight:700">Boş vaxtlar</h2>
+
+          <div style="display:flex;gap:8px;padding:4px;background:var(--bg);border-radius:999px">
+            <sc-for list="{{ clinicTabs }}" as="t" hint-placeholder-count="2">
+              <button type="button" onClick="{{ t.onPick }}" style="{{ t.style }}">{{ t.label }}</button>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:16px;overflow-x:auto;padding-bottom:4px">
+            <sc-for list="{{ days }}" as="d" hint-placeholder-count="7">
+              <button type="button" onClick="{{ d.onPick }}" style="{{ d.style }}">
+                <span style="font-size:13px;font-weight:600">{{ d.weekday }}</span>
+                <span style="font-size:13px;font-weight:500;opacity:.8">{{ d.date }}</span>
+                <span style="font-size:13px;font-weight:500;opacity:.8">{{ d.free }}</span>
+              </button>
+            </sc-for>
+          </div>
+
+          <div style="font-size:13px;font-weight:500;color:var(--muted);margin-top:18px">{{ dayLabel }}</div>
+
+          <sc-if value="{{ hasTimes }}" hint-placeholder-val="{{ true }}">
+            <div data-slots style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px">
+              <sc-for list="{{ times }}" as="t" hint-placeholder-count="9">
+                <button type="button" disabled="{{ t.disabled }}" onClick="{{ t.onPick }}" style="{{ t.style }}">{{ t.label }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noTimes }}" hint-placeholder-val="{{ false }}">
+            <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:var(--ink-soft)">Bu gün üçün boş saat yoxdur. Başqa gün və ya digər klinikanı seçin.</p>
+          </sc-if>
+
+          <sc-if value="{{ picked }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:16px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:14px;padding:16px">
+              <div style="font-size:15px;font-weight:600">{{ pickedLabel }}</div>
+              <button type="button" onClick="{{ onBook }}" style="margin-top:12px;height:46px;padding:0 10px 0 24px;border-radius:999px;background:var(--accent);border:none;color:#FFFFFF;font-size:15px;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:14px;cursor:pointer" style-hover="filter:brightness(.94)">Randevunu təsdiqlə<span style="width:32px;height:32px;flex:0 0 32px;border-radius:999px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:15px">→</span></button>
+            </div>
+          </sc-if>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <footer style="background:#1C2220;color:#EDEFEC;margin-top:88px">
+    <div style="max-width:1240px;margin:0 auto;padding:72px 24px 34px">
+      <div data-foot style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;gap:34px">
+        <div style="font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-0.03em;display:flex;align-items:baseline;gap:5px">mediconnect<span style="width:9px;height:9px;border-radius:999px;background:var(--accent);display:inline-block"></span></div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#8C9490;margin-bottom:16px">Platforma</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:500">
+            <a href="#" style="color:#EDEFEC">Haqqımızda</a>
+            <a href="#" style="color:#EDEFEC">Necə işləyir</a>
+            <a href="#" style="color:#EDEFEC">Karyera</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#8C9490;margin-bottom:16px">Pasientlər üçün</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:500">
+            <a href="MediConnect Həkim Axtarışı.dc.html" style="color:#EDEFEC">Həkim axtar</a>
+            <a href="#" style="color:#EDEFEC">Randevularım</a>
+            <a href="#" style="color:#EDEFEC">Tibbi sənədlər</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#8C9490;margin-bottom:16px">Klinikalar üçün</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:500">
+            <a href="#" style="color:#EDEFEC">Qoşul</a>
+            <a href="#" style="color:#EDEFEC">İdarə paneli</a>
+            <a href="#" style="color:#EDEFEC">Dəstək</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#8C9490;margin-bottom:16px">Əlaqə</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:500">
+            <a href="tel:+994122000000" style="color:#EDEFEC">+994 12 200 00 00</a>
+            <a href="mailto:salam@mediconnect.az" style="color:#EDEFEC">salam@mediconnect.az</a>
+            <span style="color:#8C9490">Bakı, Nizami küç. 12</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:56px;padding-top:22px;border-top:1px solid rgba(237,239,236,.2);display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;font-size:13px;font-weight:500;color:#8C9490">
+        <span>© 2026 MediConnect MMC. Bütün hüquqlar qorunur.</span>
+        <span>Platforma tibbi məsləhət vermir, yalnız həkimlə əlaqə qurur.</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240}}">
+const WD = ['B.','B.e.','Ç.a.','Ç.','C.a.','C.','Ş.'];
+const MONTHS = ['yan','fev','mar','apr','may','iyn','iyl','avq','sen','okt','noy','dek'];
+const CLINICS = [
+  {id:'mk', name:'Mərkəzi Klinika', open:[1,2,3,4,5], from:9, to:18},
+  {id:'kt', name:'Kaspi Tibb Mərkəzi', open:[2,5], from:14, to:19}
+];
+const DIST = [{stars:'5 ulduz',count:112},{stars:'4 ulduz',count:14},{stars:'3 ulduz',count:4},{stars:'2 ulduz',count:1},{stars:'1 ulduz',count:1}];
+
+class Component extends DCLogic {
+  state = { clinic:'mk', dayIndex:0, picked:null, fav:false };
+
+  days(){
+    const base = new Date(2026, 8, 20);
+    const out = [];
+    for (let i = 0; i < 7; i++){
+      const d = new Date(base.getTime() + i * 86400000);
+      out.push({ i, weekday:i === 0 ? 'Bu gün' : WD[d.getDay()], date:d.getDate() + ' ' + MONTHS[d.getMonth()], dow:d.getDay() });
+    }
+    return out;
+  }
+
+  slotsFor(day){
+    const c = CLINICS.find(x => x.id === this.state.clinic);
+    if (!c.open.includes(day.dow)) return [];
+    const out = [];
+    for (let h = c.from; h < c.to; h++){
+      [0, 30].forEach(m => {
+        const label = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
+        const busy = (h * 2 + m / 30 + day.i * 3 + (c.id === 'kt' ? 1 : 0)) % 3 === 0;
+        out.push({ label, busy });
+      });
+    }
+    return out;
+  }
+
+  renderVals(){
+    const s = this.state;
+    const days = this.days();
+    const day = days[s.dayIndex] || days[0];
+    const slots = this.slotsFor(day);
+    const clinicName = (CLINICS.find(c => c.id === s.clinic) || {}).name;
+    const max = Math.max.apply(null, DIST.map(d => d.count));
+
+    const dayStyle = active => 'flex:0 0 auto;display:flex;flex-direction:column;gap:2px;align-items:flex-start;text-align:left;padding:10px 14px;border-radius:16px;cursor:pointer;white-space:nowrap;border:1px solid '
+      + (active ? 'var(--accent)' : 'var(--line)')
+      + ';background:' + (active ? 'var(--accent)' : 'var(--surface)')
+      + ';color:' + (active ? '#FFFFFF' : 'var(--ink)');
+
+    return {
+      distribution: DIST.map(d => ({
+        stars:d.stars, count:d.count,
+        barStyle: 'display:block;height:8px;border-radius:999px;background:var(--accent);width:' + Math.round(d.count / max * 100) + '%'
+      })),
+      clinicTabs: CLINICS.map(c => ({
+        label:c.name,
+        style:'flex:1;height:38px;padding:0 14px;border-radius:999px;border:none;font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;background:'
+          + (s.clinic === c.id ? 'var(--surface)' : 'transparent')
+          + ';color:var(--ink);box-shadow:' + (s.clinic === c.id ? 'var(--shadow)' : 'none'),
+        onPick: () => this.setState({clinic:c.id, picked:null})
+      })),
+      days: days.map(d => {
+        const free = this.slotsFor(d).filter(x => !x.busy).length;
+        return {
+          weekday:d.weekday, date:d.date,
+          free: free ? free + ' boş yer' : 'boş yer yoxdur',
+          style: dayStyle(s.dayIndex === d.i),
+          onPick: () => this.setState({dayIndex:d.i, picked:null})
+        };
+      }),
+      dayLabel: clinicName + ' · ' + day.weekday + ', ' + day.date,
+      hasTimes: slots.length > 0,
+      noTimes: slots.length === 0,
+      times: slots.map(t => ({
+        label:t.label,
+        disabled:t.busy,
+        style:'height:40px;border-radius:12px;font-size:13px;font-weight:600;white-space:nowrap;border:1px solid '
+          + (s.picked === t.label && !t.busy ? 'var(--accent)' : 'var(--line)')
+          + ';background:' + (t.busy ? 'var(--bg)' : s.picked === t.label ? 'var(--accent-soft)' : 'var(--surface)')
+          + ';color:' + (t.busy ? 'var(--muted)' : 'var(--ink)')
+          + ';cursor:' + (t.busy ? 'not-allowed' : 'pointer'),
+        onPick: t.busy ? undefined : () => this.setState({picked:t.label})
+      })),
+      picked: !!s.picked,
+      pickedLabel: s.picked ? (day.weekday + ', ' + day.date + ' · ' + s.picked + ' · ' + clinicName) : '',
+      favLabel: s.fav ? 'Favoritlərdən çıxar' : 'Favoritlərə əlavə et',
+      onFav: () => this.setState({fav:!s.fav}),
+      onBook: () => {}
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent:#F2785C; --ink:#1C2220; --ink-soft:#5A6360; --muted:#8C9490;
+  --bg:#EDEFEC; --bg-warm:#FAF9F7; --surface:#FFFFFF; --line:#E0E3DF;
+  --accent-soft:#FDEDE8; --success:#2F7D67; --warning:#B5741A; --danger:#C4453A;
+  --footer-bg:#1C2220; --footer-ink:#EDEFEC; --footer-muted:#8C9490;
+  --skeleton:#E8EAE6;
+  --shadow:0 2px 12px rgba(28,34,32,.05);
+  --shadow-float:0 8px 28px rgba(28,34,32,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --ink:#EDEFEC; --ink-soft:#AEB5B1; --muted:#8C9490;
+    --bg:#121716; --bg-warm:#171D1B; --surface:#1C2220; --line:#2C3432;
+    --accent-soft:#2A211F; --skeleton:#242C2A;
+    --footer-bg:#0D1211;
+    --shadow:0 2px 12px rgba(0,0,0,.35); --shadow-float:0 8px 28px rgba(0,0,0,.45);
+  }
+}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:var(--ink);text-decoration:none}
+a:hover{color:var(--accent)}
+button,select,input{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+@keyframes skeletonPulse{0%,100%{opacity:1}50%{opacity:.45}}
+@media (max-width:980px){
+  [data-nav]{display:none !important}
+  [data-layout]{grid-template-columns:1fr !important}
+  [data-filters]{position:static !important}
+  [data-search]{grid-template-columns:1fr !important}
+  [data-search] [data-sep]{display:none !important}
+  [data-foot]{grid-template-columns:1fr 1fr !important}
+}
+@media (max-width:640px){
+  [data-result]{grid-template-columns:1fr !important}
+  [data-rating]{text-align:left !important}
+  [data-foot]{grid-template-columns:1fr !important}
+}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--bg)">
+
+  <header style="background:var(--bg-warm);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30">
+    <div style="max-width:1240px;margin:0 auto;padding:0 24px;height:74px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <a href="MediConnect Ana Səhifə.dc.html" style="font-size:19px;font-weight:700;letter-spacing:-0.02em;display:flex;align-items:baseline;gap:3px">mediconnect<span style="width:6px;height:6px;border-radius:999px;background:var(--accent);display:inline-block"></span></a>
+      <nav data-nav style="display:flex;align-items:center;gap:30px;font-size:14px;font-weight:500;color:var(--ink-soft)">
+        <a href="#" style="color:var(--ink-soft)">Necə işləyir</a>
+        <a href="#" style="color:var(--accent);font-weight:600">Həkimlər</a>
+        <a href="#" style="color:var(--ink-soft)">Klinikalar</a>
+        <a href="#" style="color:var(--ink-soft)">Suallar</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:18px">
+        <a href="#" style="font-size:14px;font-weight:600;color:var(--ink)">Daxil ol</a>
+        <button type="button" style="height:46px;padding:0 24px;border-radius:999px;background:var(--surface);border:1px solid var(--ink);color:var(--ink);font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="background:var(--ink);color:var(--bg-warm)">Randevu al</button>
+      </div>
+    </div>
+  </header>
+
+  <main style="max-width:1240px;margin:0 auto;padding:36px 24px 0">
+
+    <h1 style="margin:0 0 22px;font-size:34px;font-weight:700;letter-spacing:-0.02em">Həkim axtarışı</h1>
+
+    <div data-search style="background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:10px;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr auto;align-items:center;gap:12px">
+      <label style="display:block;padding:4px 12px">
+        <span style="display:block;font-size:13px;font-weight:500;color:var(--muted);margin-bottom:2px">Ad və ya ixtisas</span>
+        <input type="text" value="{{ query }}" onChange="{{ onQuery }}" placeholder="Məsələn: kardioloq" style="width:100%;border:none;background:transparent;font-size:15px;font-weight:600;color:var(--ink);padding:0">
+      </label>
+      <div data-sep style="width:1px;height:34px;background:var(--line)"></div>
+      <label style="display:block;padding:4px 12px">
+        <span style="display:block;font-size:13px;font-weight:500;color:var(--muted);margin-bottom:2px">Şəhər</span>
+        <select value="{{ city }}" onChange="{{ onCity }}" style="width:100%;border:none;background:transparent;font-size:15px;font-weight:600;color:var(--ink);padding:0;cursor:pointer">
+          <option>Bütün şəhərlər</option><option>Bakı</option><option>Sumqayıt</option><option>Gəncə</option>
+        </select>
+      </label>
+      <div data-sep style="width:1px;height:34px;background:var(--line)"></div>
+      <label style="display:block;padding:4px 12px">
+        <span style="display:block;font-size:13px;font-weight:500;color:var(--muted);margin-bottom:2px">Tarix</span>
+        <input type="date" value="{{ date }}" onChange="{{ onDate }}" style="width:100%;border:none;background:transparent;font-size:15px;font-weight:600;color:var(--ink);padding:0">
+      </label>
+      <button type="button" onClick="{{ onSearch }}" style="height:46px;padding:0 10px 0 24px;border-radius:999px;background:var(--accent);border:none;color:#FFFFFF;font-size:15px;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:14px;cursor:pointer" style-hover="filter:brightness(.94)">Axtar<span style="width:32px;height:32px;flex:0 0 32px;border-radius:999px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:15px">→</span></button>
+    </div>
+
+    <div data-layout style="display:grid;grid-template-columns:280px 1fr;gap:24px;margin-top:28px;align-items:start">
+
+      <aside data-filters style="position:sticky;top:98px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <h2 style="margin:0;font-size:16px;font-weight:600">Filtrlər</h2>
+          <button type="button" onClick="{{ onReset }}" style="background:none;border:none;padding:0;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer" style-hover="color:var(--accent)">Filtrləri sıfırla</button>
+        </div>
+
+        <sc-if value="{{ hasChips }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
+            <sc-for list="{{ chips }}" as="chip" hint-placeholder-count="2">
+              <button type="button" onClick="{{ chip.onRemove }}" style="display:flex;align-items:center;gap:8px;background:var(--accent-soft);border:1px solid var(--accent);color:var(--ink);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer">{{ chip.label }}<span style="color:var(--accent);font-size:14px">×</span></button>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <div style="margin-top:22px;padding-top:20px;border-top:1px solid var(--line)">
+          <div style="font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:12px">İXTİSAS</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ specOptions }}" as="opt" hint-placeholder-count="6">
+              <label style="display:flex;align-items:center;gap:10px;font-size:15px;font-weight:500;cursor:pointer">
+                <input type="checkbox" checked="{{ opt.checked }}" onChange="{{ opt.onToggle }}" style="width:16px;height:16px;accent-color:#F2785C;cursor:pointer">
+                <span style="flex:1">{{ opt.name }}</span>
+                <span style="font-size:13px;font-weight:500;color:var(--muted)">{{ opt.count }}</span>
+              </label>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="margin-top:22px;padding-top:20px;border-top:1px solid var(--line)">
+          <div style="font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:12px">ŞƏHƏR VƏ RAYON</div>
+          <select value="{{ city }}" onChange="{{ onCity }}" style="width:100%;height:42px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font-size:15px;font-weight:500;padding:0 12px;cursor:pointer">
+            <option>Bütün şəhərlər</option><option>Bakı</option><option>Sumqayıt</option><option>Gəncə</option>
+          </select>
+          <select value="{{ district }}" onChange="{{ onDistrict }}" style="width:100%;height:42px;margin-top:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font-size:15px;font-weight:500;padding:0 12px;cursor:pointer">
+            <sc-for list="{{ districtOptions }}" as="d" hint-placeholder-count="4">
+              <option>{{ d }}</option>
+            </sc-for>
+          </select>
+        </div>
+
+        <div style="margin-top:22px;padding-top:20px;border-top:1px solid var(--line)">
+          <div style="font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:12px">KLİNİKA</div>
+          <select value="{{ clinic }}" onChange="{{ onClinic }}" style="width:100%;height:42px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font-size:15px;font-weight:500;padding:0 12px;cursor:pointer">
+            <option>Bütün klinikalar</option><option>Mərkəzi Klinika</option><option>Kaspi Tibb Mərkəzi</option><option>Sağlam Ailə</option><option>Şəfa Hospital</option>
+          </select>
+        </div>
+
+        <div style="margin-top:22px;padding-top:20px;border-top:1px solid var(--line)">
+          <div style="font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:12px">MİNİMUM REYTİNQ</div>
+          <div style="display:flex;gap:8px">
+            <sc-for list="{{ ratingOptions }}" as="r" hint-placeholder-count="4">
+              <button type="button" onClick="{{ r.onPick }}" style="{{ r.style }}">{{ r.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="margin-top:22px;padding-top:20px;border-top:1px solid var(--line)">
+          <div style="font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:12px">HƏKİMİN CİNSİ</div>
+          <div style="display:flex;gap:8px">
+            <sc-for list="{{ genderOptions }}" as="g" hint-placeholder-count="3">
+              <button type="button" onClick="{{ g.onPick }}" style="{{ g.style }}">{{ g.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="margin-top:22px;padding-top:20px;border-top:1px solid var(--line)">
+          <div style="font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:12px">DANIŞDIĞI DİL</div>
+          <select value="{{ lang }}" onChange="{{ onLang }}" style="width:100%;height:42px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font-size:15px;font-weight:500;padding:0 12px;cursor:pointer">
+            <option>Fərqi yoxdur</option><option>Azərbaycanca</option><option>Rusca</option><option>İngiliscə</option><option>Türkcə</option>
+          </select>
+        </div>
+
+        <div style="margin-top:22px;padding-top:20px;border-top:1px solid var(--line)">
+          <div style="font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:12px">İŞ TƏCRÜBƏSİ</div>
+          <select value="{{ exp }}" onChange="{{ onExp }}" style="width:100%;height:42px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font-size:15px;font-weight:500;padding:0 12px;cursor:pointer">
+            <option>Fərqi yoxdur</option><option>3 ildən çox</option><option>7 ildən çox</option><option>15 ildən çox</option>
+          </select>
+        </div>
+
+        <div style="margin-top:22px;padding-top:20px;border-top:1px solid var(--line)">
+          <div style="font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.04em;margin-bottom:12px">BOŞ VAXT</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ availOptions }}" as="a" hint-placeholder-count="4">
+              <button type="button" onClick="{{ a.onPick }}" style="{{ a.style }}">{{ a.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </aside>
+
+      <section>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px">
+          <div style="font-size:22px;font-weight:700">{{ countLabel }}</div>
+          <label style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:var(--muted)">Çeşidlə
+            <select value="{{ sort }}" onChange="{{ onSort }}" style="height:42px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font-size:14px;font-weight:600;padding:0 16px;cursor:pointer">
+              <option>Reytinq</option><option>Təcrübə</option><option>Ən yaxın boş vaxt</option>
+            </select>
+          </label>
+        </div>
+
+        <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <sc-for list="{{ skeletons }}" as="s" hint-placeholder-count="3">
+              <div style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;animation:skeletonPulse 1.2s ease-in-out infinite">
+                <div style="display:flex;gap:18px;align-items:flex-start">
+                  <div style="width:64px;height:64px;flex:0 0 64px;border-radius:999px;background:var(--skeleton)"></div>
+                  <div style="flex:1;display:flex;flex-direction:column;gap:10px">
+                    <div style="height:16px;width:46%;border-radius:6px;background:var(--skeleton)"></div>
+                    <div style="height:13px;width:30%;border-radius:6px;background:var(--skeleton)"></div>
+                    <div style="height:13px;width:62%;border-radius:6px;background:var(--skeleton)"></div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:10px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)">
+                  <div style="height:34px;width:120px;border-radius:999px;background:var(--skeleton)"></div>
+                  <div style="height:34px;width:120px;border-radius:999px;background:var(--skeleton)"></div>
+                  <div style="height:34px;width:120px;border-radius:999px;background:var(--skeleton)"></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:44px 22px">
+            <h3 style="margin:0;font-size:22px;font-weight:700">Uyğun həkim tapılmadı</h3>
+            <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:60ch">Reytinq həddini aşağı salın və ya bir neçə ixtisası birdən seçin — çox vaxt nəticəni ən çox daraldan filtr elə budur.</p>
+            <button type="button" onClick="{{ onReset }}" style="margin-top:22px;height:46px;padding:0 24px;border-radius:999px;background:var(--surface);border:1px solid var(--ink);color:var(--ink);font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="background:var(--ink);color:var(--bg-warm)">Filtrləri sıfırla</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showList }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <sc-for list="{{ results }}" as="doc" hint-placeholder-count="4">
+              <article style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px" style-hover="border-color:var(--accent)">
+                <div data-result style="display:grid;grid-template-columns:64px 1fr auto;gap:18px;align-items:start">
+                  <div style="width:64px;height:64px;border-radius:999px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--ink-soft)">{{ doc.initials }}</div>
+                  <div>
+                    <h3 style="margin:0;font-size:16px;font-weight:600">{{ doc.name }}</h3>
+                    <div style="font-size:13px;font-weight:500;color:var(--muted);margin-top:4px">{{ doc.meta }}</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px">
+                      <sc-for list="{{ doc.langs }}" as="lg" hint-placeholder-count="2">
+                        <span style="border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:13px;font-weight:500;color:var(--ink-soft)">{{ lg }}</span>
+                      </sc-for>
+                    </div>
+                    <div style="font-size:13px;font-weight:500;color:var(--ink-soft);margin-top:12px">{{ doc.clinics }}</div>
+                  </div>
+                  <div data-rating style="text-align:right">
+                    <div style="display:flex;align-items:center;gap:5px;justify-content:flex-end;font-size:16px;font-weight:600"><span style="color:var(--accent)">★</span>{{ doc.rating }}</div>
+                    <div style="font-size:13px;font-weight:500;color:var(--muted);margin-top:4px">{{ doc.reviews }}</div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)">
+                  <sc-for list="{{ doc.slots }}" as="slot" hint-placeholder-count="3">
+                    <button type="button" onClick="{{ slot.onPick }}" style="{{ slot.style }}">{{ slot.label }}</button>
+                  </sc-for>
+                  <a href="#" style="margin-left:auto;font-size:13px;font-weight:600;color:var(--accent)">Profilə bax</a>
+                </div>
+              </article>
+            </sc-for>
+          </div>
+        </sc-if>
+      </section>
+
+    </div>
+  </main>
+
+  <footer style="background:var(--footer-bg);color:var(--footer-ink);margin-top:88px">
+    <div style="max-width:1240px;margin:0 auto;padding:72px 24px 34px">
+      <div data-foot style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr;gap:34px">
+        <div style="font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-0.03em;display:flex;align-items:baseline;gap:5px">mediconnect<span style="width:9px;height:9px;border-radius:999px;background:var(--accent);display:inline-block"></span></div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--footer-muted);margin-bottom:16px">Platforma</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:500">
+            <a href="#" style="color:var(--footer-ink)">Haqqımızda</a>
+            <a href="#" style="color:var(--footer-ink)">Necə işləyir</a>
+            <a href="#" style="color:var(--footer-ink)">Karyera</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--footer-muted);margin-bottom:16px">Pasientlər üçün</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:500">
+            <a href="#" style="color:var(--footer-ink)">Həkim axtar</a>
+            <a href="#" style="color:var(--footer-ink)">Randevularım</a>
+            <a href="#" style="color:var(--footer-ink)">Tibbi sənədlər</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--footer-muted);margin-bottom:16px">Klinikalar üçün</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:500">
+            <a href="#" style="color:var(--footer-ink)">Qoşul</a>
+            <a href="#" style="color:var(--footer-ink)">İdarə paneli</a>
+            <a href="#" style="color:var(--footer-ink)">Dəstək</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--footer-muted);margin-bottom:16px">Əlaqə</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:500">
+            <a href="tel:+994122000000" style="color:var(--footer-ink)">+994 12 200 00 00</a>
+            <a href="mailto:salam@mediconnect.az" style="color:var(--footer-ink)">salam@mediconnect.az</a>
+            <span style="color:var(--footer-muted)">Bakı, Nizami küç. 12</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:56px;padding-top:22px;border-top:1px solid rgba(140,148,144,.35);display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;font-size:13px;font-weight:500;color:var(--footer-muted)">
+        <span>© 2026 MediConnect MMC. Bütün hüquqlar qorunur.</span>
+        <span>Platforma tibbi məsləhət vermir, yalnız həkimlə əlaqə qurur.</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240}}">
+const DOCTORS = [
+  {n:'Aygün Məmmədova',s:'Kardioloq',y:14,g:'Qadın',c:'Bakı',d:'Nəsimi',cl:['Mərkəzi Klinika'],l:['Azərbaycanca','Rusca'],r:4.9,rv:132,slots:[{t:'sabah 10:00',w:1},{t:'sabah 14:30',w:1},{t:'12 sen 09:00',w:3}]},
+  {n:'Rəşad Hüseynov',s:'Nevroloq',y:9,g:'Kişi',c:'Bakı',d:'Yasamal',cl:['Kaspi Tibb Mərkəzi'],l:['Azərbaycanca','İngiliscə'],r:4.8,rv:97,slots:[{t:'sabah 12:30',w:1},{t:'sabah 16:00',w:1},{t:'13 sen 11:00',w:3}]},
+  {n:'Leyla Əliyeva',s:'Pediatr',y:17,g:'Qadın',c:'Sumqayıt',d:'Mərkəz',cl:['Sağlam Ailə'],l:['Azərbaycanca','Rusca','Türkcə'],r:4.9,rv:214,slots:[{t:'bu gün 17:15',w:0},{t:'sabah 09:15',w:1},{t:'12 sen 10:30',w:3}]},
+  {n:'Kamran Quliyev',s:'Ortoped',y:21,g:'Kişi',c:'Gəncə',d:'Kəpəz',cl:['Şəfa Hospital'],l:['Azərbaycanca'],r:4.7,rv:68,slots:[{t:'sabah 15:45',w:1},{t:'14 sen 10:00',w:4},{t:'15 sen 12:00',w:5}]},
+  {n:'Nərmin Səfərova',s:'Dermatoloq',y:6,g:'Qadın',c:'Bakı',d:'Nərimanov',cl:['Kaspi Tibb Mərkəzi','Mərkəzi Klinika'],l:['Azərbaycanca','Rusca'],r:4.6,rv:54,slots:[{t:'bu gün 18:00',w:0},{t:'sabah 11:00',w:1},{t:'12 sen 13:45',w:3}]},
+  {n:'Elçin Babayev',s:'Endokrinoloq',y:12,g:'Kişi',c:'Bakı',d:'Nəsimi',cl:['Mərkəzi Klinika'],l:['Azərbaycanca','İngiliscə'],r:4.8,rv:110,slots:[{t:'sabah 09:30',w:1},{t:'13 sen 14:00',w:3},{t:'16 sen 10:00',w:6}]},
+  {n:'Günel Rzayeva',s:'Kardioloq',y:8,g:'Qadın',c:'Sumqayıt',d:'28 May',cl:['Sağlam Ailə'],l:['Azərbaycanca','Rusca'],r:4.5,rv:41,slots:[{t:'sabah 13:00',w:1},{t:'12 sen 15:30',w:3},{t:'17 sen 09:00',w:7}]},
+  {n:'Tural İsmayılov',s:'Nevroloq',y:19,g:'Kişi',c:'Bakı',d:'Yasamal',cl:['Mərkəzi Klinika','Kaspi Tibb Mərkəzi'],l:['Azərbaycanca','Rusca','İngiliscə'],r:4.9,rv:186,slots:[{t:'bu gün 19:00',w:0},{t:'sabah 10:45',w:1},{t:'12 sen 16:15',w:3}]},
+  {n:'Sevinc Orucova',s:'Pediatr',y:4,g:'Qadın',c:'Bakı',d:'Nərimanov',cl:['Kaspi Tibb Mərkəzi'],l:['Azərbaycanca','Türkcə'],r:4.4,rv:27,slots:[{t:'sabah 08:45',w:1},{t:'13 sen 09:30',w:3},{t:'14 sen 11:15',w:4}]},
+  {n:'Fuad Məmmədli',s:'Ortoped',y:11,g:'Kişi',c:'Gəncə',d:'Nizami',cl:['Şəfa Hospital'],l:['Azərbaycanca','Rusca'],r:4.6,rv:73,slots:[{t:'sabah 14:00',w:1},{t:'15 sen 10:30',w:5},{t:'18 sen 12:45',w:8}]},
+  {n:'Aysel Hacıyeva',s:'Dermatoloq',y:16,g:'Qadın',c:'Bakı',d:'Nəsimi',cl:['Mərkəzi Klinika'],l:['Azərbaycanca','İngiliscə','Rusca'],r:4.8,rv:143,slots:[{t:'bu gün 16:30',w:0},{t:'sabah 12:00',w:1},{t:'13 sen 15:00',w:3}]},
+  {n:'Orxan Vəliyev',s:'Endokrinoloq',y:7,g:'Kişi',c:'Sumqayıt',d:'Mərkəz',cl:['Sağlam Ailə'],l:['Azərbaycanca'],r:4.3,rv:33,slots:[{t:'sabah 11:30',w:1},{t:'14 sen 13:00',w:4},{t:'19 sen 09:45',w:9}]}
+];
+const SPECS = ['Kardioloq','Nevroloq','Endokrinoloq','Pediatr','Dermatoloq','Ortoped'];
+const DISTRICTS = {'Bütün şəhərlər':['Bütün rayonlar'],'Bakı':['Bütün rayonlar','Nəsimi','Yasamal','Nərimanov'],'Sumqayıt':['Bütün rayonlar','Mərkəz','28 May'],'Gəncə':['Bütün rayonlar','Kəpəz','Nizami']};
+const DEFAULTS = {query:'',city:'Bütün şəhərlər',district:'Bütün rayonlar',clinic:'Bütün klinikalar',minRating:0,gender:'Fərqi yoxdur',lang:'Fərqi yoxdur',exp:'Fərqi yoxdur',avail:'İstənilən vaxt',date:''};
+
+class Component extends DCLogic {
+  state = Object.assign({}, DEFAULTS, {sort:'Reytinq', loading:true, picked:null});
+
+  componentDidMount(){ this.load(); }
+  load(){
+    clearTimeout(this._t);
+    this.setState({loading:true});
+    this._t = setTimeout(() => this.setState({loading:false}), 550);
+  }
+  set(patch){ this.setState(patch, () => this.load()); }
+
+  pill(active){
+    return 'height:34px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;border:1px solid '
+      + (active ? 'var(--accent)' : 'var(--line)')
+      + ';background:' + (active ? 'var(--accent-soft)' : 'var(--surface)') + ';color:var(--ink)';
+  }
+
+  filtered(){
+    const s = this.state;
+    const q = s.query.trim().toLowerCase();
+    const minY = s.exp === '3 ildən çox' ? 3 : s.exp === '7 ildən çox' ? 7 : s.exp === '15 ildən çox' ? 15 : 0;
+    const maxW = s.avail === 'Bu gün' ? 0 : s.avail === 'Sabah' ? 1 : s.avail === 'Bu həftə' ? 7 : 99;
+    let out = DOCTORS.filter(d =>
+      (!q || d.n.toLowerCase().includes(q) || d.s.toLowerCase().includes(q)) &&
+      (!s.specs || !s.specs.length || s.specs.includes(d.s)) &&
+      (s.city === 'Bütün şəhərlər' || d.c === s.city) &&
+      (s.district === 'Bütün rayonlar' || d.d === s.district) &&
+      (s.clinic === 'Bütün klinikalar' || d.cl.includes(s.clinic)) &&
+      d.r >= s.minRating &&
+      (s.gender === 'Fərqi yoxdur' || d.g === s.gender) &&
+      (s.lang === 'Fərqi yoxdur' || d.l.includes(s.lang)) &&
+      d.y >= minY &&
+      d.slots.some(sl => sl.w <= maxW)
+    );
+    const soonest = d => Math.min.apply(null, d.slots.map(x => x.w));
+    if (s.sort === 'Təcrübə') out = out.slice().sort((a,b) => b.y - a.y);
+    else if (s.sort === 'Ən yaxın boş vaxt') out = out.slice().sort((a,b) => soonest(a) - soonest(b));
+    else out = out.slice().sort((a,b) => b.r - a.r);
+    return out;
+  }
+
+  chips(){
+    const s = this.state, out = [];
+    (s.specs || []).forEach(name => out.push({id:'s'+name, label:name, onRemove:() => this.set({specs:(this.state.specs||[]).filter(x => x !== name)})}));
+    if (s.city !== DEFAULTS.city) out.push({id:'city', label:s.city, onRemove:() => this.set({city:DEFAULTS.city, district:DEFAULTS.district})});
+    if (s.district !== DEFAULTS.district) out.push({id:'dist', label:s.district, onRemove:() => this.set({district:DEFAULTS.district})});
+    if (s.clinic !== DEFAULTS.clinic) out.push({id:'cl', label:s.clinic, onRemove:() => this.set({clinic:DEFAULTS.clinic})});
+    if (s.minRating) out.push({id:'r', label:s.minRating + '+ reytinq', onRemove:() => this.set({minRating:0})});
+    if (s.gender !== DEFAULTS.gender) out.push({id:'g', label:s.gender, onRemove:() => this.set({gender:DEFAULTS.gender})});
+    if (s.lang !== DEFAULTS.lang) out.push({id:'l', label:s.lang, onRemove:() => this.set({lang:DEFAULTS.lang})});
+    if (s.exp !== DEFAULTS.exp) out.push({id:'e', label:s.exp, onRemove:() => this.set({exp:DEFAULTS.exp})});
+    if (s.avail !== DEFAULTS.avail) out.push({id:'a', label:s.avail, onRemove:() => this.set({avail:DEFAULTS.avail})});
+    if (s.query.trim()) out.push({id:'q', label:'“' + s.query.trim() + '”', onRemove:() => this.set({query:''})});
+    return out;
+  }
+
+  renderVals(){
+    const s = this.state;
+    const list = this.filtered();
+    const specs = s.specs || [];
+    return {
+      query:s.query, city:s.city, district:s.district, clinic:s.clinic,
+      lang:s.lang, exp:s.exp, sort:s.sort, date:s.date,
+      loading:s.loading,
+      showEmpty: !s.loading && list.length === 0,
+      showList: !s.loading && list.length > 0,
+      skeletons:[1,2,3],
+      countLabel: s.loading ? 'Axtarılır…' : list.length + ' həkim tapıldı',
+      chips: this.chips(),
+      hasChips: this.chips().length > 0,
+      districtOptions: DISTRICTS[s.city] || ['Bütün rayonlar'],
+      specOptions: SPECS.map(name => ({
+        name, count: DOCTORS.filter(d => d.s === name).length,
+        checked: specs.includes(name),
+        onToggle: () => this.set({specs: specs.includes(name) ? specs.filter(x => x !== name) : specs.concat([name])})
+      })),
+      ratingOptions: [{v:0,l:'Hamısı'},{v:4.5,l:'4.5+'},{v:4.7,l:'4.7+'},{v:4.9,l:'4.9+'}].map(o => ({
+        label:o.l, style:this.pill(s.minRating === o.v), onPick:() => this.set({minRating:o.v})
+      })),
+      genderOptions: ['Fərqi yoxdur','Qadın','Kişi'].map(g => ({
+        label:g === 'Fərqi yoxdur' ? 'Hamısı' : g, style:this.pill(s.gender === g), onPick:() => this.set({gender:g})
+      })),
+      availOptions: ['İstənilən vaxt','Bu gün','Sabah','Bu həftə'].map(a => ({
+        label:a, style:this.pill(s.avail === a), onPick:() => this.set({avail:a})
+      })),
+      results: list.map(d => ({
+        key:d.n, initials:d.n.split(' ').map(w => w[0]).join(''),
+        name:'Dr. ' + d.n, meta:d.s + ' · ' + d.y + ' il təcrübə',
+        langs:d.l, clinics:d.cl.join(' · ') + ' — ' + d.c,
+        rating:d.r.toFixed(1), reviews:d.rv + ' rəy',
+        slots:d.slots.map(sl => ({
+          label:sl.t, style:this.pill(s.picked === d.n + sl.t),
+          onPick:() => this.setState({picked:d.n + sl.t})
+        }))
+      })),
+      onQuery: e => this.set({query:e.target.value}),
+      onCity: e => this.set({city:e.target.value, district:'Bütün rayonlar'}),
+      onDistrict: e => this.set({district:e.target.value}),
+      onClinic: e => this.set({clinic:e.target.value}),
+      onLang: e => this.set({lang:e.target.value}),
+      onExp: e => this.set({exp:e.target.value}),
+      onDate: e => this.set({date:e.target.value}),
+      onSort: e => this.set({sort:e.target.value}),
+      onSearch: () => this.load(),
+      onReset: () => this.setState(Object.assign({}, DEFAULTS, {specs:[], picked:null}), () => this.load())
+    };
+  }
+}
+</script>
+</body>
+</html>

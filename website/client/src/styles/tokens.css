@@ -1,0 +1,70 @@
+/* Dizayn tokenləri — MediConnect *.dc.html prototiplərindən (ui-guide.md). */
+:root {
+  color-scheme: light;
+  --accent: #F2785C;
+  --accent-soft: #FDEDE8;
+  --ink: #1C2220;
+  --ink-soft: #5A6360;
+  --muted: #8C9490;
+  --bg: #EDEFEC;
+  --bg-warm: #FAF9F7;
+  --surface: #FFFFFF;
+  --line: #E0E3DF;
+  --success: #2F7D67;
+  --warning: #B5741A;
+  --danger: #C4453A;
+  --success-soft: #E3F1EC;
+  --warning-soft: #F8EEDD;
+  --danger-soft: #F8E4E1;
+  --footer-bg: #1C2220;
+  --footer-ink: #EDEFEC;
+  --footer-muted: #8C9490;
+  --shadow: 0 2px 12px rgba(28, 34, 32, .05);
+  --shadow-float: 0 8px 28px rgba(28, 34, 32, .10);
+
+  --radius-pill: 999px;
+  --radius-card: 18px;
+  --radius-input: 14px;
+  --font: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --container: 1240px;
+}
+
+/* Tünd rejim: OS seçimi (istifadəçi "Açıq" seçməyibsə) və ya açıq seçim — data-theme lib/theme.ts-dən. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --ink: #EDEFEC;
+    --ink-soft: #AEB5B1;
+    --muted: #8C9490;
+    --bg: #121716;
+    --bg-warm: #171D1B;
+    --surface: #1C2220;
+    --line: #2C3432;
+    --accent-soft: #2A211F;
+    --success-soft: #16261F;
+    --warning-soft: #2A2216;
+    --danger-soft: #2C1A18;
+    --footer-bg: #0D1211;
+    --shadow: 0 2px 12px rgba(0, 0, 0, .35);
+    --shadow-float: 0 8px 28px rgba(0, 0, 0, .45);
+  }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --ink: #EDEFEC;
+  --ink-soft: #AEB5B1;
+  --muted: #8C9490;
+  --bg: #121716;
+  --bg-warm: #171D1B;
+  --surface: #1C2220;
+  --line: #2C3432;
+  --accent-soft: #2A211F;
+  --success-soft: #16261F;
+  --warning-soft: #2A2216;
+  --danger-soft: #2C1A18;
+  --footer-bg: #0D1211;
+  --shadow: 0 2px 12px rgba(0, 0, 0, .35);
+  --shadow-float: 0 8px 28px rgba(0, 0, 0, .45);
+}
+:root[data-theme='light'] { color-scheme: light; }

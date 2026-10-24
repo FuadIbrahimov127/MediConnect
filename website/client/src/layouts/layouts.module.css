@@ -1,0 +1,80 @@
+/* Public header/footer, panel shell, auth kartı — prototiplərdəki ölçülərlə. */
+
+.header { background: var(--bg-warm); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 40; }
+.headerInner { height: 74px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.nav { display: flex; align-items: center; gap: 30px; font-size: 14px; font-weight: 500; }
+.nav a { color: var(--ink-soft); }
+.nav a:hover, .nav a[aria-current='page'] { color: var(--accent); }
+.headerActions { display: flex; align-items: center; gap: 18px; }
+.headerLink { font-size: 14px; font-weight: 600; color: var(--ink); background: none; border: none; cursor: pointer; padding: 0; }
+.headerLink:hover { color: var(--accent); }
+.headerLinkSoft { composes: headerLink; color: var(--ink-soft); }
+@media (max-width: 920px) { .nav { display: none; } }
+@media (max-width: 620px) { .hideMobile { display: none !important; } }
+
+.main { min-height: calc(100vh - 74px); }
+
+.footer { background: var(--footer-bg); color: var(--footer-ink); margin-top: 120px; }
+.footerInner { padding: 88px 24px 72px; }
+.footerGrid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr; gap: 34px; }
+.footerTitle { font-size: 13px; font-weight: 600; color: var(--footer-muted); margin-bottom: 16px; }
+.footerLinks { display: flex; flex-direction: column; gap: 10px; font-size: 14px; font-weight: 500; }
+.footerLinks a { color: var(--footer-ink); }
+.footerLinks a:hover { color: var(--accent); }
+.footerBottom {
+  margin-top: 72px; padding-top: 26px; border-top: 1px solid rgba(140, 148, 144, .35);
+  display: flex; flex-wrap: wrap; gap: 18px; justify-content: space-between; font-size: 13px; font-weight: 500; color: var(--footer-muted);
+}
+@media (max-width: 920px) { .footerGrid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 620px) { .footerGrid { grid-template-columns: 1fr; } }
+
+/* Panel (Şəxsi kabinet, həkim, klinika admin, super admin) */
+.shell { padding-top: 44px; padding-bottom: 88px; display: grid; grid-template-columns: 240px 1fr; gap: 24px; align-items: start; }
+.side {
+  position: sticky; top: 114px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-card); padding: 18px;
+}
+.sideUser { display: flex; align-items: center; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.sideName { font-size: 15px; font-weight: 600; }
+.sideRole { font-size: 13px; font-weight: 500; color: var(--muted); }
+.sideNav { display: flex; flex-direction: column; gap: 4px; margin-top: 14px; }
+.sideLink {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px;
+  font-size: 14px; font-weight: 600; color: var(--ink-soft); border: 1px solid transparent;
+}
+.sideLink:hover { background: var(--bg-warm); color: var(--ink); }
+.sideLinkActive, .sideLinkActive:hover { background: var(--accent-soft); color: var(--ink); border-color: var(--accent); }
+.sideBadge {
+  margin-left: auto; min-width: 22px; height: 22px; padding: 0 7px; border-radius: var(--radius-pill);
+  background: var(--accent); color: #FFFFFF; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;
+}
+.panelMain { min-width: 0; animation: mc-in .2s ease-out; }
+@media (max-width: 980px) {
+  .shell { grid-template-columns: 1fr; padding-top: 24px; }
+  .side { position: static; padding: 12px; }
+  .sideUser { display: none; }
+  .sideNav { flex-direction: row; overflow-x: auto; margin-top: 0; padding-bottom: 2px; scrollbar-width: none; }
+  .sideLink { white-space: nowrap; }
+}
+
+.bell {
+  position: relative; width: 40px; height: 40px; border-radius: var(--radius-pill); border: 1px solid var(--line);
+  background: var(--surface); display: inline-flex; align-items: center; justify-content: center; color: var(--ink);
+}
+.bell:hover { border-color: var(--ink); color: var(--ink); }
+.bellCount {
+  position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: var(--radius-pill);
+  background: var(--accent); color: #FFFFFF; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+
+/* Auth (qeydiyyat, giriş, PIN bərpası, dəvət) */
+.authWrap { min-height: calc(100vh - 74px); display: flex; align-items: flex-start; justify-content: center; padding: 56px 16px 88px; }
+.authCard {
+  width: min(480px, 100%); background: var(--surface); border: 1px solid var(--line); border-radius: 24px;
+  padding: 36px; box-shadow: var(--shadow); animation: mc-in .2s ease-out;
+}
+@media (max-width: 620px) { .authCard { padding: 24px 20px; } .authWrap { padding-top: 24px; } }
+
+@media print {
+  .header, .side, .footer { display: none !important; }
+  .shell { display: block; padding: 0; }
+}

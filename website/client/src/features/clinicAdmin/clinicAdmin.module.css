@@ -1,0 +1,92 @@
+/* Modul 8 — klinika admini paneli: icmal, profil, həkimlər, xidmətlər, randevular, hesabatlar. */
+
+.stack { display: flex; flex-direction: column; gap: 18px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; color: var(--ink); display: block; }
+a.stat:hover { border-color: var(--accent); color: var(--ink); }
+.statValue { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+.statLabel { font-size: 13px; font-weight: 600; color: var(--muted); margin-top: 6px; }
+.twoCol { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+
+.section { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+.sectionHead { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.sectionTitle { font-size: 18px; font-weight: 700; margin: 0; }
+.sectionSub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.formGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; }
+.full { grid-column: 1 / -1; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+
+.ro { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; padding: 14px 16px; border-radius: 14px; background: var(--bg-warm); border: 1px dashed var(--line); }
+.roLabel { font-size: 12px; font-weight: 600; color: var(--muted); }
+.roValue { font-weight: 600; margin-top: 2px; }
+
+.hours { display: flex; flex-direction: column; gap: 8px; }
+.hourRow { display: grid; grid-template-columns: 150px 110px 1fr; gap: 12px; align-items: center; }
+.hourRow .input { height: 40px; }
+.times { display: flex; gap: 8px; align-items: center; }
+.times .input { width: 120px; }
+
+.photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.photo { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); aspect-ratio: 4 / 3; background: var(--bg-warm); cursor: grab; }
+.photo img { width: 100%; height: 100%; object-fit: cover; }
+.photoDragging { opacity: .4; }
+.photoOver { outline: 2px dashed var(--accent); outline-offset: 2px; }
+.photoBar { position: absolute; inset: auto 0 0 0; display: flex; justify-content: space-between; padding: 6px 8px; background: linear-gradient(transparent, rgba(0, 0, 0, .55)); color: #fff; font-size: 12px; }
+.photoBar button { background: none; border: none; color: #fff; cursor: pointer; font-weight: 700; padding: 0 2px; }
+.logo { width: 72px; height: 72px; border-radius: 16px; object-fit: cover; border: 1px solid var(--line); background: var(--bg-warm); display: flex; align-items: center; justify-content: center; color: var(--muted); font-weight: 700; }
+.logoRow { display: flex; gap: 14px; align-items: center; }
+
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft); border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 600; display: inline-flex; gap: 6px; align-items: center; }
+.chip button { background: none; border: none; padding: 0; color: var(--muted); cursor: pointer; font-size: 14px; line-height: 1; }
+.chipToggle { composes: chip; cursor: pointer; }
+.chipToggle[aria-pressed='true'] { background: var(--ink); color: var(--bg-warm); border-color: var(--ink); }
+
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 16px; }
+.toolbar label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 600; color: var(--ink-soft); }
+.toolbar .input { height: 40px; width: auto; min-width: 140px; }
+
+.tableWrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table th { text-align: left; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding: 12px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; background: var(--bg-warm); }
+.table td { padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.table tr:last-child td { border-bottom: none; }
+.table tbody tr:hover td { background: var(--bg-warm); }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.nameCell { display: flex; gap: 10px; align-items: center; min-width: 200px; }
+/* Cədvəl xanasında flex olmasın — əks halda td sətirdən "qopur" və sütun hündürlüyü pozulur. */
+td.nameCell { display: table-cell; vertical-align: middle; }
+.nameCell a { color: var(--ink); font-weight: 600; }
+.nameCell a:hover { color: var(--accent); }
+.sub { font-size: 12px; color: var(--muted); }
+.warnText { color: var(--warning); font-weight: 600; }
+.dangerText { color: var(--danger); font-weight: 600; }
+
+.list { display: flex; flex-direction: column; gap: 8px; }
+.row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); }
+a.row:hover { border-color: var(--accent); color: var(--ink); }
+
+.steps { display: flex; gap: 8px; margin-bottom: 18px; font-size: 13px; font-weight: 600; color: var(--muted); }
+.steps span[aria-current='step'] { color: var(--ink); }
+.found { padding: 14px 16px; border-radius: 14px; border: 1px solid var(--success); background: var(--success-soft); }
+.svcRow { display: grid; grid-template-columns: 24px 1fr 130px; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+.svcRow:first-child { border-top: none; }
+.svcRow .input { height: 38px; }
+
+.decision { border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.decisionHead { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-weight: 600; }
+.radioRow { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; }
+.radioRow label { display: flex; gap: 6px; align-items: center; }
+
+.selectBar { position: sticky; bottom: 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 14px; background: var(--ink); color: var(--bg-warm); box-shadow: var(--shadow-float); margin-top: 14px; }
+
+@media (max-width: 900px) {
+  .twoCol { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .formGrid { grid-template-columns: 1fr; }
+  .hourRow { grid-template-columns: 1fr; gap: 6px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .section { padding: 16px; }
+  .svcRow { grid-template-columns: 24px 1fr; }
+  .svcRow .input { grid-column: 2; }
+}

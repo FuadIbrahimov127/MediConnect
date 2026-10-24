@@ -1,0 +1,57 @@
+.viewerOverlay { position: fixed; inset: 0; z-index: 960; background: rgba(12, 16, 15, .7); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.viewer { width: min(960px, 100%); height: min(88vh, 900px); background: var(--surface); border-radius: 18px; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); }
+.viewerHead { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.viewerBody { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; background: var(--bg); padding: 12px; }
+.viewerImg { max-width: 100%; max-height: 100%; object-fit: contain; user-select: none; border-radius: 8px; background: #fff; }
+.viewerFrame { width: 100%; height: 100%; border: 0; border-radius: 8px; background: #fff; }
+.viewerError { color: var(--danger); font-weight: 600; }
+.viewerNote { padding: 10px 16px; font-size: 13px; color: var(--ink-soft); border-top: 1px solid var(--line); background: var(--warning-soft); }
+
+.toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 18px; }
+.toolbar .input { height: 42px; width: auto; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft); border-radius: 999px; padding: 7px 14px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.chip[aria-pressed='true'] { background: var(--ink); color: var(--bg-warm); border-color: var(--ink); }
+.group { margin-bottom: 24px; }
+.groupTitle { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 10px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.doc { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.docFocus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.docHead { display: flex; gap: 12px; align-items: flex-start; }
+.icon { width: 42px; height: 42px; flex: 0 0 42px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; }
+.docName { font-weight: 700; overflow-wrap: anywhere; }
+.docMeta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.docDesc { font-size: 13px; color: var(--ink-soft); }
+.docBadges { display: flex; gap: 6px; flex-wrap: wrap; }
+.docActions { display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid var(--line); padding-top: 10px; margin-top: auto; }
+.link { background: none; border: none; padding: 0; color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer; }
+.link:hover { text-decoration: underline; }
+.linkMuted { composes: link; color: var(--muted); }
+.drop {
+  border: 2px dashed var(--line); border-radius: 16px; padding: 24px; text-align: center; color: var(--ink-soft); cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--bg-warm);
+}
+.drop:hover, .dropActive { border-color: var(--accent); color: var(--ink); }
+.fileRow { border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 10px; }
+.fileRowHead { display: flex; justify-content: space-between; gap: 10px; align-items: center; font-size: 14px; font-weight: 600; }
+.fileGrid { display: grid; grid-template-columns: 1fr 150px; gap: 10px; }
+.progress { height: 6px; border-radius: 999px; background: var(--line); overflow: hidden; }
+.progress span { display: block; height: 100%; background: var(--accent); transition: width .2s; }
+.doctorList { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; max-height: 260px; overflow-y: auto; }
+.doctorOpt { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; cursor: pointer; }
+.doctorOpt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.doctorOpt input { accent-color: var(--accent); }
+.timeline { position: relative; padding-left: 28px; display: flex; flex-direction: column; gap: 14px; }
+.timeline::before { content: ''; position: absolute; left: 10px; top: 6px; bottom: 6px; width: 2px; background: var(--line); }
+.event { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; color: var(--ink); display: block; }
+a.event:hover { border-color: var(--accent); color: var(--ink); }
+.dot { position: absolute; left: -26px; top: 16px; width: 18px; height: 18px; border-radius: 50%; border: 3px solid var(--bg); }
+.dot_APPOINTMENT { background: var(--accent); }
+.dot_PRESCRIPTION { background: var(--success); }
+.dot_DOCUMENT { background: var(--warning); }
+.eventHead { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; color: var(--muted); }
+.eventTitle { font-weight: 700; margin-top: 2px; }
+@media (max-width: 620px) { .fileGrid { grid-template-columns: 1fr; } }
+@media print {
+  .noPrint { display: none !important; }
+}

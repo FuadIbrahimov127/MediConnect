@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#EDEFEC; --surface:#FFFFFF; --bg-warm:#FAF9F7;
+  --ink:#1C2220; --ink-soft:#5A6360; --muted:#8C9490;
+  --line:#E0E3DF; --accent:#F2785C; --accent-soft:#FDEDE8;
+  --shadow:0 2px 12px rgba(28,34,32,.05);
+  --shadow-float:0 8px 28px rgba(28,34,32,.12);
+}
+html,body{margin:0;padding:0}
+body{background:#EDEFEC;color:#1C2220;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:var(--ink);text-decoration:none}
+a:hover{color:var(--accent)}
+button,select,input,textarea{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes modalIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media (max-width:980px){
+  [data-shell]{grid-template-columns:1fr !important}
+  [data-side]{position:static !important}
+  [data-fields]{grid-template-columns:1fr !important}
+  [data-scroll]{overflow-x:auto !important}
+}
+@media (max-width:640px){
+  [data-stats]{grid-template-columns:1fr 1fr !important}
+  [data-actions]{flex-direction:column !important;align-items:stretch !important}
+}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--bg)">
+
+  <header style="background:var(--bg-warm);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40">
+    <div style="max-width:1240px;margin:0 auto;padding:0 24px;height:74px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <a href="MediConnect Ana Səhifə.dc.html" style="font-size:19px;font-weight:700;letter-spacing:-0.02em;display:flex;align-items:baseline;gap:3px">mediconnect<span style="width:6px;height:6px;border-radius:999px;background:var(--accent);display:inline-block"></span><span style="font-size:13px;font-weight:600;color:var(--muted);margin-left:8px">klinika admin</span></a>
+      <div style="display:flex;align-items:center;gap:18px">
+        <span style="font-size:13px;font-weight:500;color:var(--muted)">Mərkəzi Klinika</span>
+        <a href="#" style="font-size:14px;font-weight:600;color:var(--ink)">Çıxış</a>
+      </div>
+    </div>
+  </header>
+
+  <div data-shell style="max-width:1240px;margin:0 auto;padding:28px 24px 88px;display:grid;grid-template-columns:240px 1fr;gap:24px;align-items:start">
+
+    <aside data-side style="position:sticky;top:98px;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px">
+      <div style="display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line)">
+        <div style="width:44px;height:44px;flex:0 0 44px;border-radius:999px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--ink-soft)">SƏ</div>
+        <div>
+          <div style="font-size:15px;font-weight:600">Səbinə Əhmədova</div>
+          <div style="font-size:13px;font-weight:500;color:var(--muted)">Administrator</div>
+        </div>
+      </div>
+      <nav style="display:flex;flex-direction:column;gap:4px;margin-top:14px">
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+          <button type="button" onClick="{{ n.onPick }}" style="{{ n.style }}">{{ n.label }}</button>
+        </sc-for>
+      </nav>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;font-weight:500;color:var(--muted);line-height:1.6">Bu hesab tibbi məzmuna çıxış icazəsinə malik deyil.</div>
+    </aside>
+
+    <main style="min-width:0">
+      <h1 style="margin:0 0 22px;font-size:34px;font-weight:700;letter-spacing:-0.02em">{{ pageTitle }}</h1>
+
+      <sc-if value="{{ isDoctors }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <button type="button" onClick="{{ onOpenAdd }}" style="height:46px;padding:0 10px 0 24px;border-radius:999px;background:var(--accent);border:none;color:#FFFFFF;font-size:15px;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:14px;cursor:pointer" style-hover="filter:brightness(.94)">Həkim əlavə et<span style="width:32px;height:32px;flex:0 0 32px;border-radius:999px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:15px">+</span></button>
+
+          <section data-scroll style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:22px">
+            <div style="min-width:820px">
+              <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr auto;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--muted)">
+                <span>Həkim</span><span>İxtisas</span><span>Lisenziya</span><span>Bitmə tarixi</span><span>Status</span><span>Hərəkət</span>
+              </div>
+              <sc-for list="{{ doctors }}" as="d" hint-placeholder-count="4">
+                <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)">
+                  <span style="font-size:15px;font-weight:600">{{ d.name }}</span>
+                  <span style="font-size:15px;font-weight:500;color:var(--ink-soft)">{{ d.spec }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--ink-soft)">{{ d.license }}</span>
+                  <span style="{{ d.expiryStyle }}">{{ d.expiry }}</span>
+                  <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600"><span style="{{ d.dotStyle }}"></span>{{ d.status }}</span>
+                  <button type="button" onClick="{{ d.onAction }}" style="height:34px;padding:0 14px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="border-color:var(--accent)">{{ d.actionLabel }}</button>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+
+          <p style="margin:18px 0 0;font-size:13px;font-weight:500;color:var(--muted);line-height:1.6;max-width:70ch">Həkim özü qeydiyyatdan keçə bilmir. Dəvət SMS ilə göndərilir, həkim SİMA rəqəmsal kimliyi ilə doğrulanır və yalnız bundan sonra profil aktivləşir.</p>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isAppts }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="background:#FBEFE0;border:2px solid #B5741A;border-radius:18px;padding:20px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="width:22px;height:22px;flex:0 0 22px;border-radius:999px;background:#B5741A;color:#FFFFFF;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">!</span>
+              <span style="font-size:16px;font-weight:700;color:#7A4E11">Tibbi məzmun bu panelə bağlıdır</span>
+            </div>
+            <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#7A4E11;max-width:70ch">Administrator şikayət mətnini, diaqnozu, reseptləri və tibbi sənədləri görə bilmir. Yalnız randevunun təşkilati məlumatları — kim, nə vaxt, hansı həkimə — açıqdır.</p>
+          </div>
+
+          <div data-stats style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px">
+            <sc-for list="{{ apptStats }}" as="s" hint-placeholder-count="4">
+              <div style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+                <div style="font-size:52px;font-weight:800;letter-spacing:-0.03em;line-height:1">{{ s.value }}</div>
+                <div style="font-size:13px;font-weight:500;color:var(--muted);margin-top:8px">{{ s.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:22px">
+            <div data-fields style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+              <label style="display:block">
+                <span style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px">Tarixdən</span>
+                <input type="date" value="{{ fromDate }}" onChange="{{ onFromDate }}" style="width:100%;height:46px;border:1px solid var(--line);border-radius:14px;padding:0 14px;font-size:15px;font-weight:600;color:var(--ink);background:var(--surface)">
+              </label>
+              <label style="display:block">
+                <span style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px">Tarixə</span>
+                <input type="date" value="{{ toDate }}" onChange="{{ onToDate }}" style="width:100%;height:46px;border:1px solid var(--line);border-radius:14px;padding:0 14px;font-size:15px;font-weight:600;color:var(--ink);background:var(--surface)">
+              </label>
+              <label style="display:block">
+                <span style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px">Həkim</span>
+                <select value="{{ filterDoctor }}" onChange="{{ onFilterDoctor }}" style="width:100%;height:46px;border:1px solid var(--line);border-radius:14px;padding:0 14px;font-size:15px;font-weight:600;color:var(--ink);background:var(--surface);cursor:pointer">
+                  <sc-for list="{{ doctorNames }}" as="dn" hint-placeholder-count="4">
+                    <option>{{ dn }}</option>
+                  </sc-for>
+                </select>
+              </label>
+              <label style="display:block">
+                <span style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px">Status</span>
+                <select value="{{ filterStatus }}" onChange="{{ onFilterStatus }}" style="width:100%;height:46px;border:1px solid var(--line);border-radius:14px;padding:0 14px;font-size:15px;font-weight:600;color:var(--ink);background:var(--surface);cursor:pointer">
+                  <option>Hamısı</option><option>Təsdiqlənib</option><option>Tamamlanıb</option><option>Gəlməyib</option><option>Ləğv edilib</option>
+                </select>
+              </label>
+            </div>
+
+            <div data-scroll style="margin-top:20px">
+              <div style="min-width:860px">
+                <div style="display:grid;grid-template-columns:1.2fr 1.2fr 1.2fr 1fr .8fr 1fr auto;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--muted)">
+                  <span>Randevu nömrəsi</span><span>Pasient</span><span>Həkim</span><span>Tarix</span><span>Saat</span><span>Status</span><span>Tibbi məzmun</span>
+                </div>
+                <sc-for list="{{ appointments }}" as="a" hint-placeholder-count="5">
+                  <div style="display:grid;grid-template-columns:1.2fr 1.2fr 1.2fr 1fr .8fr 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--ink-soft)">{{ a.code }}</span>
+                    <span style="font-size:15px;font-weight:600">{{ a.patient }}</span>
+                    <span style="font-size:15px;font-weight:500;color:var(--ink-soft)">{{ a.doctor }}</span>
+                    <span style="font-size:13px;font-weight:500;color:var(--ink-soft)">{{ a.date }}</span>
+                    <span style="font-size:13px;font-weight:600">{{ a.time }}</span>
+                    <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600"><span style="{{ a.dotStyle }}"></span>{{ a.status }}</span>
+                    <button type="button" onClick="{{ a.onView }}" style="height:34px;padding:0 14px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="border-color:#C4453A;color:#C4453A">Bax</button>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div data-actions style="display:flex;align-items:center;gap:12px;margin-top:20px">
+              <button type="button" onClick="{{ onExcel }}" style="height:46px;padding:0 24px;border-radius:999px;background:var(--surface);border:1px solid var(--ink);color:var(--ink);font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="background:var(--ink);color:var(--bg-warm)">Excel-ə çıxar</button>
+              <button type="button" onClick="{{ onPdf }}" style="height:46px;padding:0 24px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--ink);font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="border-color:var(--accent)">PDF</button>
+              <span style="font-size:13px;font-weight:500;color:var(--muted)">Hesabatda yalnız təşkilati sütunlar olur.</span>
+            </div>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isServices }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:70ch">Xidmətlər mərkəzi kataloqdan seçilir — yeni ad yazmaq mümkün deyil. Qiymət sahəsi yoxdur: müayinənin dəyəri klinikada, platformadan kənarda müəyyən edilir.</p>
+          <section data-scroll style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+            <div style="min-width:760px">
+              <div style="display:grid;grid-template-columns:1.4fr 1fr 2fr auto;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--muted)">
+                <span>Xidmət</span><span>Müddət</span><span>Bağlı həkimlər</span><span>Hərəkət</span>
+              </div>
+              <sc-for list="{{ services }}" as="sv" hint-placeholder-count="4">
+                <div style="display:grid;grid-template-columns:1.4fr 1fr 2fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)">
+                  <span style="font-size:15px;font-weight:600">{{ sv.name }}</span>
+                  <select value="{{ sv.duration }}" onChange="{{ sv.onDuration }}" style="height:40px;border:1px solid var(--line);border-radius:12px;padding:0 12px;font-size:13px;font-weight:600;color:var(--ink);background:var(--surface);cursor:pointer">
+                    <option>15 dəqiqə</option><option>20 dəqiqə</option><option>30 dəqiqə</option><option>40 dəqiqə</option><option>45 dəqiqə</option>
+                  </select>
+                  <span style="font-size:13px;font-weight:500;color:var(--ink-soft)">{{ sv.doctors }}</span>
+                  <button type="button" onClick="{{ sv.onEdit }}" style="height:34px;padding:0 14px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="border-color:var(--accent)">Həkimləri dəyiş</button>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isOverride }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:70ch">Cədvəl müdaxiləsi fövqəladə hallar üçündür — həkimin xəstələnməsi, klinikanın bağlanması. Hər müdaxilə qeydə alınır və həkimə bildiriş gedir.</p>
+          <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+            <div data-fields style="display:grid;grid-template-columns:1.4fr 1fr auto;gap:14px;align-items:end">
+              <label style="display:block">
+                <span style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px">Həkim</span>
+                <select value="{{ ovDoctor }}" onChange="{{ onOvDoctor }}" style="width:100%;height:46px;border:1px solid var(--line);border-radius:14px;padding:0 14px;font-size:15px;font-weight:600;color:var(--ink);background:var(--surface);cursor:pointer">
+                  <sc-for list="{{ activeDoctorNames }}" as="dn" hint-placeholder-count="3">
+                    <option>{{ dn }}</option>
+                  </sc-for>
+                </select>
+              </label>
+              <label style="display:block">
+                <span style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px">Tarix</span>
+                <input type="date" value="{{ ovDate }}" onChange="{{ onOvDate }}" style="width:100%;height:46px;border:1px solid var(--line);border-radius:14px;padding:0 14px;font-size:15px;font-weight:600;color:var(--ink);background:var(--surface)">
+              </label>
+              <button type="button" onClick="{{ onCloseDay }}" style="height:46px;padding:0 24px;border-radius:999px;background:var(--surface);border:1px solid var(--ink);color:var(--ink);font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="background:var(--ink);color:var(--bg-warm)">Günü bağla</button>
+            </div>
+
+            <sc-if value="{{ ovOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--line)">
+                <h2 style="margin:0 0 4px;font-size:22px;font-weight:700">Təsirlənən randevular</h2>
+                <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:var(--ink-soft)">{{ ovSummary }}</p>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ affected }}" as="a" hint-placeholder-count="3">
+                    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:14px;padding:14px 16px">
+                      <div>
+                        <div style="font-size:15px;font-weight:600">{{ a.time }} · {{ a.patient }}</div>
+                        <div style="font-size:13px;font-weight:500;color:var(--muted);margin-top:4px">{{ a.info }}</div>
+                      </div>
+                      <div data-actions style="display:flex;gap:10px">
+                        <sc-if value="{{ a.pendingAction }}" hint-placeholder-val="{{ true }}">
+                          <button type="button" onClick="{{ a.onMove }}" style="height:34px;padding:0 14px;border-radius:999px;background:var(--surface);border:1px solid var(--ink);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="background:var(--ink);color:var(--bg-warm)">Başqa həkimə köçür</button>
+                        </sc-if>
+                        <sc-if value="{{ a.pendingAction }}" hint-placeholder-val="{{ true }}">
+                          <button type="button" onClick="{{ a.onCancel }}" style="height:34px;padding:0 14px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="border-color:#C4453A;color:#C4453A">Ləğv et</button>
+                        </sc-if>
+                        <sc-if value="{{ a.resolved }}" hint-placeholder-val="{{ false }}">
+                          <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink-soft)"><span style="{{ a.dotStyle }}"></span>{{ a.resolution }}</span>
+                        </sc-if>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+            <h2 style="margin:0 0 6px;font-size:22px;font-weight:700">Super Admin tərəfindən təyin edilən</h2>
+            <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:70ch">Bu sahələr platformanın baş administratoru tərəfindən qeydiyyat sənədləri əsasında doldurulur və burada dəyişdirilmir.</p>
+            <div data-fields style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <sc-for list="{{ lockedFields }}" as="f" hint-placeholder-count="4">
+                <div style="background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px 16px">
+                  <div style="font-size:13px;font-weight:600;color:var(--muted)">{{ f.k }}</div>
+                  <div style="font-size:15px;font-weight:600;color:var(--ink-soft);margin-top:6px">{{ f.v }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+
+          <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+            <h2 style="margin:0 0 18px;font-size:22px;font-weight:700">Klinika məlumatları</h2>
+            <label style="display:block">
+              <span style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px">Təsvir</span>
+              <textarea value="{{ description }}" onChange="{{ onDescription }}" rows="4" style="width:100%;border:1px solid var(--line);border-radius:14px;padding:14px;font-size:15px;line-height:1.6;color:var(--ink);background:var(--surface);resize:vertical"></textarea>
+            </label>
+            <div data-fields style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
+              <sc-for list="{{ editFields }}" as="f" hint-placeholder-count="3">
+                <label style="display:block">
+                  <span style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px">{{ f.k }}</span>
+                  <input type="text" value="{{ f.v }}" onChange="{{ f.onChange }}" style="width:100%;height:46px;border:1px solid var(--line);border-radius:14px;padding:0 14px;font-size:15px;font-weight:500;color:var(--ink);background:var(--surface)">
+                </label>
+              </sc-for>
+            </div>
+            <button type="button" onClick="{{ onSaveProfile }}" style="margin-top:20px;height:46px;padding:0 24px;border-radius:999px;background:var(--surface);border:1px solid var(--ink);color:var(--ink);font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="background:var(--ink);color:var(--bg-warm)">Dəyişiklikləri yadda saxla</button>
+          </section>
+
+          <section style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+            <h2 style="margin:0 0 14px;font-size:22px;font-weight:700">Foto qalereya</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px">
+              <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="3">
+                <div style="background:var(--accent-soft);border-radius:20px;aspect-ratio:4/3;display:flex;align-items:flex-end;padding:14px;font-size:13px;font-weight:600;color:var(--ink-soft)">{{ g }}</div>
+              </sc-for>
+              <button type="button" onClick="{{ onAddPhoto }}" style="border:1px dashed var(--line);border-radius:20px;aspect-ratio:4/3;background:var(--surface);color:var(--ink-soft);font-size:13px;font-weight:600;cursor:pointer" style-hover="border-color:var(--accent);color:var(--accent)">Foto əlavə et</button>
+            </div>
+          </section>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+
+  <sc-if value="{{ addOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:60;background:rgba(28,34,32,.45);display:flex;align-items:center;justify-content:center;padding:24px">
+      <div role="dialog" aria-modal="true" style="width:100%;max-width:560px;max-height:88vh;overflow-y:auto;background:var(--surface);border-radius:18px;padding:26px;box-shadow:var(--shadow-float);animation:modalIn .18s ease-out">
+        <h2 style="margin:0 0 6px;font-size:22px;font-weight:700">Həkim əlavə et</h2>
+        <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:var(--ink-soft)">Məlumatlar doldurulduqdan sonra həkimə SMS dəvəti göndərilir.</p>
+        <div data-fields style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <sc-for list="{{ formFields }}" as="f" hint-placeholder-count="6">
+            <label style="{{ f.wrapStyle }}">
+              <span style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px">{{ f.label }}</span>
+              <input type="{{ f.type }}" value="{{ f.value }}" onChange="{{ f.onChange }}" placeholder="{{ f.placeholder }}" style="{{ f.inputStyle }}">
+              <sc-if value="{{ f.hasError }}" hint-placeholder-val="{{ false }}">
+                <span style="display:block;font-size:13px;font-weight:500;color:#C4453A;margin-top:6px;line-height:1.5">{{ f.error }}</span>
+              </sc-if>
+            </label>
+          </sc-for>
+          <label style="display:block">
+            <span style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px">İxtisas</span>
+            <select value="{{ formSpec }}" onChange="{{ onFormSpec }}" style="width:100%;height:46px;border:1px solid var(--line);border-radius:14px;padding:0 14px;font-size:15px;font-weight:600;color:var(--ink);background:var(--surface);cursor:pointer">
+              <option>Kardioloq</option><option>Nevroloq</option><option>Endokrinoloq</option><option>Pediatr</option><option>Dermatoloq</option><option>Ortoped</option>
+            </select>
+          </label>
+        </div>
+        <div data-actions style="display:flex;align-items:center;gap:14px;margin-top:22px">
+          <button type="button" onClick="{{ onSubmitDoctor }}" style="{{ submitStyle }}">Dəvət göndər</button>
+          <button type="button" onClick="{{ onCloseModal }}" style="background:none;border:none;padding:0;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer" style-hover="color:var(--accent)">Bağla</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ moveOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:62;background:rgba(28,34,32,.45);display:flex;align-items:center;justify-content:center;padding:24px">
+      <div role="dialog" aria-modal="true" style="width:100%;max-width:460px;background:var(--surface);border-radius:18px;padding:26px;box-shadow:var(--shadow-float);animation:modalIn .18s ease-out">
+        <h2 style="margin:0 0 6px;font-size:22px;font-weight:700">Başqa həkimə köçür</h2>
+        <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:var(--ink-soft)">{{ moveSummary }}</p>
+        <label style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px">Yeni həkim</label>
+        <select value="{{ moveTarget }}" onChange="{{ onMoveTarget }}" style="width:100%;height:46px;border:1px solid var(--line);border-radius:14px;padding:0 14px;font-size:15px;font-weight:600;color:var(--ink);background:var(--surface);cursor:pointer">
+          <sc-for list="{{ moveTargets }}" as="mt" hint-placeholder-count="2">
+            <option>{{ mt }}</option>
+          </sc-for>
+        </select>
+        <div data-actions style="display:flex;align-items:center;gap:14px;margin-top:22px">
+          <button type="button" onClick="{{ onMoveConfirm }}" style="height:46px;padding:0 24px;border-radius:999px;background:var(--accent);border:none;color:#FFFFFF;font-size:15px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="filter:brightness(.94)">Köçür</button>
+          <button type="button" onClick="{{ onCloseModal }}" style="background:none;border:none;padding:0;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer" style-hover="color:var(--accent)">Bağla</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="position:fixed;right:24px;bottom:24px;z-index:70;display:flex;flex-direction:column;gap:10px;align-items:flex-end;pointer-events:none">
+    <sc-for list="{{ toasts }}" as="t" hint-placeholder-count="0">
+      <div style="{{ t.style }}">
+        <div style="{{ t.titleStyle }}">{{ t.title }}</div>
+        <div style="font-size:13px;font-weight:500;color:var(--ink-soft);margin-top:4px;line-height:1.5">{{ t.body }}</div>
+      </div>
+    </sc-for>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240}}">
+const NAV = [
+  {id:'doctors', label:'Həkimlər'},
+  {id:'appts', label:'Randevu nəzarəti'},
+  {id:'services', label:'Xidmətlər'},
+  {id:'override', label:'Cədvəl müdaxiləsi'},
+  {id:'profile', label:'Klinika profili'}
+];
+const ST = {
+  active:{label:'Aktiv', color:'#2F7D67'},
+  invited:{label:'Dəvət göndərilib', color:'#B5741A'},
+  suspended:{label:'Dayandırılıb', color:'#C4453A'}
+};
+const AST = {
+  confirmed:{label:'Təsdiqlənib', color:'#2F7D67'},
+  done:{label:'Tamamlanıb', color:'#8C9490'},
+  missed:{label:'Gəlməyib', color:'#C4453A'},
+  cancelled:{label:'Ləğv edilib', color:'#C4453A'}
+};
+const APPTS = [
+  {code:'MC-2026-0920-1174', patient:'Nigar Səlimova', doctor:'Dr. Aygün Məmmədova', date:'20 sentyabr 2026', time:'10:30', status:'confirmed'},
+  {code:'MC-2026-0920-1180', patient:'Rəna Quliyeva', doctor:'Dr. Aygün Məmmədova', date:'20 sentyabr 2026', time:'11:30', status:'confirmed'},
+  {code:'MC-2026-0919-0942', patient:'Elçin Məmmədli', doctor:'Dr. Rəşad Hüseynov', date:'19 sentyabr 2026', time:'09:00', status:'done'},
+  {code:'MC-2026-0918-0771', patient:'Kamran Vəliyev', doctor:'Dr. Aygün Məmmədova', date:'18 sentyabr 2026', time:'15:00', status:'missed'},
+  {code:'MC-2026-0917-0655', patient:'Günel Rzayeva', doctor:'Dr. Leyla Əliyeva', date:'17 sentyabr 2026', time:'12:00', status:'done'},
+  {code:'MC-2026-0916-0512', patient:'Orxan Səfərov', doctor:'Dr. Rəşad Hüseynov', date:'16 sentyabr 2026', time:'16:30', status:'cancelled'}
+];
+const AFFECTED = [
+  {id:'f1', time:'10:30', patient:'Nigar Səlimova', info:'Təkrar müayinə · 20 dəqiqə · MC-2026-0920-1174'},
+  {id:'f2', time:'11:30', patient:'Rəna Quliyeva', info:'Exokardioqrafiya · 40 dəqiqə · MC-2026-0920-1180'},
+  {id:'f3', time:'14:30', patient:'Tural Abbasov', info:'İlkin müayinə · 30 dəqiqə · MC-2026-0920-1192'}
+];
+
+class Component extends DCLogic {
+  state = {
+    page:'doctors', toasts:[],
+    doctors:[
+      {id:'d1', name:'Dr. Aygün Məmmədova', spec:'Kardioloq', license:'AZ-KRD-11482', expiry:'2027-04-18', status:'active'},
+      {id:'d2', name:'Dr. Rəşad Hüseynov', spec:'Nevroloq', license:'AZ-NVR-20934', expiry:'2026-10-30', status:'active'},
+      {id:'d3', name:'Dr. Leyla Əliyeva', spec:'Pediatr', license:'AZ-PED-33871', expiry:'2028-01-12', status:'active'},
+      {id:'d4', name:'Dr. Kamran Quliyev', spec:'Ortoped', license:'AZ-ORT-41260', expiry:'2026-11-05', status:'suspended'}
+    ],
+    addOpen:false,
+    form:{fin:'', name:'', phone:'', license:'', expiry:''},
+    formSpec:'Kardioloq', touched:false,
+    fromDate:'2026-09-01', toDate:'2026-09-30', filterDoctor:'Bütün həkimlər', filterStatus:'Hamısı',
+    services:[
+      {id:'s1', name:'İlkin müayinə', duration:'30 dəqiqə', doctors:'Aygün Məmmədova, Rəşad Hüseynov, Leyla Əliyeva'},
+      {id:'s2', name:'Təkrar müayinə', duration:'20 dəqiqə', doctors:'Aygün Məmmədova, Rəşad Hüseynov'},
+      {id:'s3', name:'Exokardioqrafiya', duration:'40 dəqiqə', doctors:'Aygün Məmmədova'},
+      {id:'s4', name:'Nəticələrin şərhi', duration:'15 dəqiqə', doctors:'Aygün Məmmədova, Leyla Əliyeva'}
+    ],
+    ovDoctor:'Dr. Aygün Məmmədova', ovDate:'2026-09-20', ovOpen:false,
+    resolutions:{}, moveOpen:false, moveId:null, moveTarget:'Dr. Rəşad Hüseynov',
+    description:'Mərkəzi Klinika 2008-ci ildən Bakıda ambulator qəbul aparır. Kardiologiya, nevrologiya və pediatriya üzrə ixtisaslaşıb.',
+    profile:{'Telefon':'+994 12 200 10 10', 'Ünvan':'Bakı, Nəsimi r., Azadlıq pr. 24', 'İş saatları':'B.e. — C. 09:00 — 18:00'}
+  };
+
+  componentWillUnmount(){ this.setState({toasts:[]}); }
+
+  toast(title, body, danger){
+    const id = Date.now() + Math.random();
+    this.setState(s => ({toasts:s.toasts.concat([{id, title, body, danger}])}));
+    setTimeout(() => this.setState(s => ({toasts:s.toasts.filter(t => t.id !== id)})), 4000);
+  }
+  dot(color){ return 'width:9px;height:9px;flex:0 0 9px;border-radius:999px;background:' + color + ';display:block'; }
+
+  daysUntil(iso){
+    const today = new Date(2026, 8, 20);
+    return Math.round((new Date(iso + 'T00:00:00') - today) / 86400000);
+  }
+  fmt(iso){
+    const M = ['yan','fev','mar','apr','may','iyn','iyl','avq','sen','okt','noy','dek'];
+    const d = new Date(iso + 'T00:00:00');
+    return d.getDate() + ' ' + M[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  errors(){
+    const f = this.state.form;
+    const e = {};
+    if (!f.fin.trim()) e.fin = 'FIN boş ola bilməz.';
+    else if (f.fin.trim().length !== 7) e.fin = 'FIN 7 simvoldan ibarət olmalıdır. Hazırda ' + f.fin.trim().length + ' simvol yazılıb.';
+    if (!f.name.trim()) e.name = 'Ad və soyadı yazın.';
+    if (!/^\+994\d{9}$/.test(f.phone.replace(/\s/g, ''))) e.phone = 'Telefon +994 ilə başlayan 12 rəqəm olmalıdır.';
+    if (!f.license.trim()) e.license = 'Lisenziya nömrəsini yazın.';
+    else if (this.state.doctors.some(d => d.license.toLowerCase() === f.license.trim().toLowerCase())) e.license = 'Bu lisenziya nömrəsi artıq başqa həkimə aiddir.';
+    if (!f.expiry) e.expiry = 'Bitmə tarixini seçin.';
+    else if (this.daysUntil(f.expiry) <= 0) e.expiry = 'Lisenziyanın müddəti keçib. Etibarlı lisenziya tarixi yazın.';
+    return e;
+  }
+
+  renderVals(){
+    const s = this.state;
+    const page = s.page;
+    const errs = this.errors();
+    const errCount = Object.keys(errs).length;
+    const names = s.doctors.map(d => d.name);
+    const filtered = APPTS.filter(a =>
+      (s.filterDoctor === 'Bütün həkimlər' || a.doctor === s.filterDoctor) &&
+      (s.filterStatus === 'Hamısı' || AST[a.status].label === s.filterStatus));
+    const moveAppt = AFFECTED.find(a => a.id === s.moveId);
+
+    const field = (key, label, type, placeholder, wide) => ({
+      label, type, placeholder,
+      value:s.form[key],
+      wrapStyle: wide ? 'display:block;grid-column:1 / -1' : 'display:block',
+      inputStyle:'width:100%;height:46px;border-radius:14px;padding:0 14px;font-size:15px;font-weight:500;color:var(--ink);background:var(--surface);border:1px solid '
+        + (s.touched && errs[key] ? '#C4453A' : 'var(--line)'),
+      hasError: !!(s.touched && errs[key]),
+      error: errs[key] || '',
+      onChange: e => { const v = e.target.value; this.setState(st => ({form:Object.assign({}, st.form, {[key]:v})})); }
+    });
+
+    return {
+      navItems: NAV.map(n => ({
+        label:n.label,
+        style:'display:flex;align-items:center;padding:11px 14px;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;text-align:left;background:'
+          + (page === n.id ? 'var(--accent-soft)' : 'transparent')
+          + ';color:' + (page === n.id ? 'var(--accent)' : 'var(--ink)'),
+        onPick: () => this.setState({page:n.id})
+      })),
+      pageTitle: (NAV.find(n => n.id === page) || {}).label,
+      isDoctors: page === 'doctors', isAppts: page === 'appts', isServices: page === 'services',
+      isOverride: page === 'override', isProfile: page === 'profile',
+
+      doctors: s.doctors.map(d => {
+        const left = this.daysUntil(d.expiry);
+        const soon = left < 60;
+        return {
+          name:d.name, spec:d.spec, license:d.license,
+          expiry: soon ? '⚠ ' + this.fmt(d.expiry) + ' · ' + left + ' gün' : this.fmt(d.expiry),
+          expiryStyle: 'font-size:13px;font-weight:' + (soon ? '700' : '500') + ';color:' + (soon ? '#B5741A' : 'var(--ink-soft)'),
+          status:ST[d.status].label, dotStyle:this.dot(ST[d.status].color),
+          actionLabel: d.status === 'suspended' ? 'Bərpa et' : d.status === 'invited' ? 'Dəvəti təkrarla' : 'Dayandır',
+          onAction: () => {
+            if (d.status === 'invited'){ this.toast('Dəvət təkrar göndərildi', d.name + ' nömrəsinə yeni SMS getdi.'); return; }
+            const next = d.status === 'suspended' ? 'active' : 'suspended';
+            this.setState(st => ({doctors:st.doctors.map(x => x.id === d.id ? Object.assign({}, x, {status:next}) : x)}));
+            this.toast(next === 'active' ? 'Həkim bərpa edildi' : 'Həkim dayandırıldı', next === 'active' ? 'Cədvəl yenidən açıqdır.' : 'Yeni randevu qəbulu bağlandı.');
+          }
+        };
+      }),
+      onOpenAdd: () => this.setState({addOpen:true, touched:false, form:{fin:'', name:'', phone:'', license:'', expiry:''}}),
+      addOpen:s.addOpen,
+      formFields: [
+        field('fin', 'FIN', 'text', '5AB12CD'),
+        field('name', 'Ad və soyad', 'text', 'Aysel Hacıyeva'),
+        field('phone', 'Telefon', 'tel', '+994501234567'),
+        field('license', 'Lisenziya nömrəsi', 'text', 'AZ-DRM-50117'),
+        field('expiry', 'Lisenziyanın bitmə tarixi', 'date', '', true)
+      ],
+      formSpec:s.formSpec,
+      onFormSpec: e => this.setState({formSpec:e.target.value}),
+      submitStyle: 'height:46px;padding:0 24px;border-radius:999px;border:none;background:var(--accent);color:#FFFFFF;font-size:15px;font-weight:600;white-space:nowrap;cursor:pointer',
+      onSubmitDoctor: () => {
+        this.setState({touched:true});
+        if (errCount){ this.toast('Dəvət göndərilmədi', errCount + ' sahədə düzəliş lazımdır. Qırmızı sahələri yoxlayın.', true); return; }
+        const f = s.form;
+        this.setState(st => ({
+          doctors:st.doctors.concat([{id:'d' + Date.now(), name:'Dr. ' + f.name.trim(), spec:st.formSpec, license:f.license.trim().toUpperCase(), expiry:f.expiry, status:'invited'}]),
+          addOpen:false, touched:false
+        }));
+        this.toast('Dəvət göndərildi', f.name.trim() + ' SMS dəvəti aldı. Profil SİMA doğrulamasından sonra aktivləşir.');
+      },
+
+      apptStats: [
+        {value:String(APPTS.length), label:'ümumi randevu'},
+        {value:String(APPTS.filter(a => a.status === 'done').length), label:'tamamlanan'},
+        {value:String(APPTS.filter(a => a.status === 'missed').length), label:'gəlməyən'},
+        {value:String(APPTS.filter(a => a.status === 'cancelled').length), label:'ləğv edilən'}
+      ],
+      fromDate:s.fromDate, toDate:s.toDate, filterDoctor:s.filterDoctor, filterStatus:s.filterStatus,
+      doctorNames:['Bütün həkimlər'].concat(names),
+      activeDoctorNames: s.doctors.filter(d => d.status === 'active').map(d => d.name),
+      onFromDate: e => this.setState({fromDate:e.target.value}),
+      onToDate: e => this.setState({toDate:e.target.value}),
+      onFilterDoctor: e => this.setState({filterDoctor:e.target.value}),
+      onFilterStatus: e => this.setState({filterStatus:e.target.value}),
+      appointments: filtered.map(a => ({
+        code:a.code, patient:a.patient, doctor:a.doctor, date:a.date, time:a.time,
+        status:AST[a.status].label, dotStyle:this.dot(AST[a.status].color),
+        onView: () => this.toast('403 — Giriş qadağandır', 'Tibbi məzmun administrator rolu üçün bağlıdır. Cəhd təhlükəsizlik qeydinə yazıldı.', true)
+      })),
+      onExcel: () => this.toast('Excel hesabatı hazırlandı', 'Fayl yalnız təşkilati sütunları ehtiva edir.'),
+      onPdf: () => this.toast('PDF hesabatı hazırlandı', 'Fayl yalnız təşkilati sütunları ehtiva edir.'),
+
+      services: s.services.map(sv => ({
+        name:sv.name, duration:sv.duration, doctors:sv.doctors,
+        onDuration: e => { const v = e.target.value; this.setState(st => ({services:st.services.map(x => x.id === sv.id ? Object.assign({}, x, {duration:v}) : x)})); this.toast('Müddət yeniləndi', sv.name + ' — ' + v + '.'); },
+        onEdit: () => this.toast('Həkim bağlantısı', 'Bu xidməti göstərən həkimləri siyahıdan seçin.')
+      })),
+
+      ovDoctor:s.ovDoctor, ovDate:s.ovDate, ovOpen:s.ovOpen,
+      onOvDoctor: e => this.setState({ovDoctor:e.target.value, ovOpen:false, resolutions:{}}),
+      onOvDate: e => this.setState({ovDate:e.target.value, ovOpen:false, resolutions:{}}),
+      onCloseDay: () => this.setState({ovOpen:true, resolutions:{}}),
+      ovSummary: s.ovDoctor + ' · ' + this.fmt(s.ovDate) + ' — ' + AFFECTED.length + ' randevu təsirlənir. Hər biri üçün qərar verin.',
+      affected: AFFECTED.map(a => {
+        const res = s.resolutions[a.id];
+        return {
+          time:a.time, patient:a.patient, info:a.info,
+          pendingAction: !res, resolved: !!res, resolution:res || '',
+          dotStyle:this.dot(res === 'Ləğv edildi' ? '#C4453A' : '#2F7D67'),
+          onMove: () => this.setState({moveOpen:true, moveId:a.id}),
+          onCancel: () => {
+            this.setState(st => ({resolutions:Object.assign({}, st.resolutions, {[a.id]:'Ləğv edildi'})}));
+            this.toast('Randevu ləğv edildi', a.patient + ' SMS ilə məlumatlandırıldı.');
+          }
+        };
+      }),
+      moveOpen:s.moveOpen,
+      moveSummary: moveAppt ? moveAppt.time + ' · ' + moveAppt.patient + ' · ' + moveAppt.info : '',
+      moveTargets: s.doctors.filter(d => d.status === 'active' && d.name !== s.ovDoctor).map(d => d.name),
+      moveTarget:s.moveTarget,
+      onMoveTarget: e => this.setState({moveTarget:e.target.value}),
+      onMoveConfirm: () => {
+        this.setState(st => ({resolutions:Object.assign({}, st.resolutions, {[st.moveId]:st.moveTarget + '-ya köçürüldü'}), moveOpen:false}));
+        this.toast('Randevu köçürüldü', 'Pasientə və yeni həkimə bildiriş göndərildi.');
+      },
+
+      lockedFields: [
+        {k:'Qeydiyyat nömrəsi', v:'1402-AZ-00873'},
+        {k:'Lisenziya', v:'SHL-2008-0412'},
+        {k:'Növ', v:'Ambulator klinika'},
+        {k:'Platforma statusu', v:'Təsdiqlənmiş tərəfdaş'}
+      ],
+      description:s.description,
+      onDescription: e => this.setState({description:e.target.value}),
+      editFields: Object.keys(s.profile).map(k => ({
+        k, v:s.profile[k],
+        onChange: e => { const v = e.target.value; this.setState(st => ({profile:Object.assign({}, st.profile, {[k]:v})})); }
+      })),
+      onSaveProfile: () => this.toast('Profil yeniləndi', 'Dəyişikliklər klinika səhifəsində görünür.'),
+      gallery:['Qəbul zalı', 'Kardiologiya kabineti', 'Laboratoriya'],
+      onAddPhoto: () => this.toast('Foto yükləmə', 'JPG və PNG qəbul olunur, maksimum 8 MB.'),
+
+      onCloseModal: () => this.setState({addOpen:false, moveOpen:false}),
+
+      toasts: s.toasts.map(t => ({
+        title:t.title, body:t.body,
+        titleStyle:'font-size:15px;font-weight:600;color:' + (t.danger ? '#C4453A' : 'var(--ink)'),
+        style:'pointer-events:auto;width:300px;background:var(--surface);border:1px solid ' + (t.danger ? '#C4453A' : 'var(--accent)')
+          + ';border-radius:14px;padding:16px;box-shadow:var(--shadow-float);animation:toastIn .18s ease-out'
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

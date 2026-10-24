@@ -1,0 +1,31 @@
+.title { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
+.lead { font-size: 15px; color: var(--ink-soft); line-height: 1.55; margin: 0 0 24px; }
+.form { display: flex; flex-direction: column; gap: 18px; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.timer { font-family: var(--font-mono); font-size: 14px; font-weight: 500; color: var(--ink-soft); }
+.timerLow { color: var(--danger); }
+.foot { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-soft); text-align: center; }
+.foot a { color: var(--accent); font-weight: 600; }
+
+.qrBox {
+  display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 22px; border-radius: 18px;
+  background: var(--bg-warm); border: 1px solid var(--line);
+}
+.qr { background: #fff; padding: 14px; border-radius: 14px; line-height: 0; }
+.qrExpired { opacity: .2; filter: blur(2px); }
+.qrStatus { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--ink-soft); }
+.pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: mc-pulse 1.2s infinite; }
+
+.readonly { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; padding: 16px; border-radius: 14px; background: var(--bg-warm); border: 1px solid var(--line); }
+.readonlyItem { min-width: 0; }
+.readonlyLabel { font-size: 12px; font-weight: 600; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+.readonlyValue { font-size: 15px; font-weight: 600; margin-top: 2px; overflow-wrap: anywhere; }
+@media (max-width: 420px) { .readonly { grid-template-columns: 1fr; } }
+
+.success { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.successIcon {
+  width: 64px; height: 64px; border-radius: 50%; background: var(--success-soft); color: var(--success);
+  display: flex; align-items: center; justify-content: center;
+}
+.hello { font-size: 15px; color: var(--ink-soft); margin: -4px 0 4px; }
+.hello strong { color: var(--ink); }

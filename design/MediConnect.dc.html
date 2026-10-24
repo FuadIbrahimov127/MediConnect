@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect width="400" height="400" fill="#FDEDE8"></rect><circle cx="200" cy="200" r="86" fill="none" stroke="#F2785C" stroke-width="14"></circle><rect x="186" y="150" width="28" height="100" rx="6" fill="#F2785C"></rect><rect x="150" y="186" width="100" height="28" rx="6" fill="#F2785C"></rect></svg>
+</template>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#EDEFEC; --surface:#FFFFFF; --bg-warm:#FAF9F7;
+  --ink:#1C2220; --ink-soft:#5A6360; --muted:#8C9490;
+  --line:#E0E3DF; --accent:#F2785C; --accent-soft:#FDEDE8;
+}
+html,body{margin:0;padding:0;height:100%}
+body{background:#EDEFEC;color:#1C2220;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:var(--ink);text-decoration:none}
+a:hover{color:var(--accent)}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+@media (max-width:980px){
+  [data-shell]{grid-template-columns:1fr !important;height:auto !important}
+  [data-rail]{position:static !important;height:auto !important}
+  [data-frame]{height:78vh !important}
+}
+</style>
+</helmet>
+
+<div data-shell style="height:100vh;display:grid;grid-template-columns:268px 1fr;gap:0;background:var(--bg)">
+
+  <aside data-rail style="height:100vh;overflow-y:auto;background:var(--bg-warm);border-right:1px solid var(--line);padding:22px">
+    <div style="display:flex;align-items:baseline;gap:3px;font-size:19px;font-weight:700;letter-spacing:-0.02em">mediconnect<span style="width:6px;height:6px;border-radius:999px;background:var(--accent);display:inline-block"></span></div>
+    <div style="font-size:13px;font-weight:500;color:var(--muted);margin-top:6px">Səkkiz ekran, bir yerdə</div>
+
+    <nav style="display:flex;flex-direction:column;gap:6px;margin-top:22px">
+      <sc-for list="{{ screens }}" as="s" hint-placeholder-count="8">
+        <button type="button" onClick="{{ s.onPick }}" style="{{ s.style }}">
+          <span style="{{ s.numStyle }}">{{ s.num }}</span>
+          <span style="flex:1;text-align:left;display:flex;flex-direction:column;gap:2px">
+            <span style="font-size:15px;font-weight:600">{{ s.label }}</span>
+            <span style="font-size:13px;font-weight:500;color:var(--muted)">{{ s.role }}</span>
+          </span>
+        </button>
+      </sc-for>
+    </nav>
+
+    <a href="{{ activePath }}" target="_blank" rel="noopener" style="display:inline-block;margin-top:22px;font-size:13px;font-weight:600;color:var(--accent)">Bu ekranı ayrı pəncərədə aç</a>
+  </aside>
+
+  <section style="height:100vh;display:flex;flex-direction:column;overflow:hidden">
+    <header style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;border-bottom:1px solid var(--line);background:var(--bg-warm)">
+      <div>
+        <h1 style="margin:0;font-size:22px;font-weight:700">{{ activeLabel }}</h1>
+        <div style="font-size:13px;font-weight:500;color:var(--muted);margin-top:4px">{{ activeRole }}</div>
+      </div>
+      <button type="button" onClick="{{ onReload }}" style="height:46px;padding:0 24px;border-radius:999px;background:var(--surface);border:1px solid var(--ink);color:var(--ink);font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="background:var(--ink);color:var(--bg-warm)">Yenilə</button>
+    </header>
+
+    <div data-frame style="flex:1;min-height:0;padding:16px;background:var(--bg)">
+      <iframe src="{{ activeSrc }}" title="{{ activeLabel }}" style="width:100%;height:100%;border:1px solid var(--line);border-radius:18px;background:var(--surface);display:block"></iframe>
+    </div>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const SCREENS = [
+  {path:'MediConnect Ana Səhifə.dc.html', label:'Ana səhifə', role:'Pasient — giriş nöqtəsi'},
+  {path:'MediConnect Həkim Axtarışı.dc.html', label:'Həkim axtarışı', role:'Pasient — filtr və nəticələr'},
+  {path:'MediConnect Həkim Profili.dc.html', label:'Həkim profili', role:'Pasient — detallı səhifə'},
+  {path:'MediConnect Randevu.dc.html', label:'Randevu alma', role:'Pasient — üç addımlı axın'},
+  {path:'MediConnect Şəxsi Kabinet.dc.html', label:'Şəxsi kabinet', role:'Pasient — sənədlər və reseptlər'},
+  {path:'MediConnect Həkim Paneli.dc.html', label:'Həkim paneli', role:'Həkim — qəbullar və resept'},
+  {path:'MediConnect Klinika Admin Paneli.dc.html', label:'Klinika admin paneli', role:'Klinika — həkim və nəzarət'},
+  {path:'MediConnect Super Admin Paneli.dc.html', label:'Platforma admin paneli', role:'Super Admin — audit və parametrlər'}
+];
+
+class Component extends DCLogic {
+  state = { index:0, nonce:0 };
+
+  renderVals(){
+    const s = this.state;
+    const active = SCREENS[s.index];
+    return {
+      screens: SCREENS.map((sc, i) => ({
+        label:sc.label, role:sc.role, num:String(i + 1).padStart(2, '0'),
+        style:'display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;cursor:pointer;background:'
+          + (i === s.index ? 'var(--accent-soft)' : 'transparent')
+          + ';border:1px solid ' + (i === s.index ? 'var(--accent)' : 'transparent')
+          + ';color:var(--ink)',
+        numStyle:'width:28px;height:28px;flex:0 0 28px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;background:'
+          + (i === s.index ? 'var(--accent)' : 'var(--surface)')
+          + ';color:' + (i === s.index ? '#FFFFFF' : 'var(--muted)')
+          + ';border:1px solid ' + (i === s.index ? 'var(--accent)' : 'var(--line)'),
+        onPick: () => this.setState({index:i})
+      })),
+      activeLabel:active.label,
+      activeRole:active.role,
+      activePath:active.path,
+      activeSrc: encodeURI(active.path) + (s.nonce ? '?r=' + s.nonce : ''),
+      onReload: () => this.setState({nonce:Date.now()})
+    };
+  }
+}
+</script>
+</body>
+</html>

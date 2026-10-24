@@ -1,0 +1,15 @@
+.row {
+  display: grid; grid-template-columns: 90px 1fr auto; gap: 16px; align-items: center; padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px; color: var(--ink); transition: border-color .15s;
+}
+.row:hover { border-color: var(--accent); color: var(--ink); }
+.time { display: flex; flex-direction: column; font-family: var(--font-mono); }
+.time strong { font-size: 18px; }
+.time span { font-family: var(--font); font-size: 12px; color: var(--muted); }
+.patient { font-size: 15px; font-weight: 600; }
+.meta { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.allergy { font-size: 12px; font-weight: 700; color: var(--danger); margin-top: 4px; }
+@media (max-width: 620px) {
+  .row { grid-template-columns: 70px 1fr; }
+  .row > :last-child { grid-column: 2; justify-self: start; }
+}

@@ -1,0 +1,23 @@
+# Asılılıqlar və build
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Mock serverin lokal məlumatları (db.json, şifrələnmiş fayllar) — `npm run seed` yenidən yaradır
+website/mock-server/data/
+
+# Mühit və loglar
+.env
+.env.*
+*.log
+
+# Claude Code-un şəxsi/lokal parametrləri
+.claude/settings.local.json
+
+# OS və redaktor faylları
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+~$*

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#EDEFEC; --surface:#FFFFFF; --bg-warm:#FAF9F7;
+  --ink:#1C2220; --ink-soft:#5A6360; --muted:#8C9490;
+  --line:#E0E3DF; --accent:#F2785C; --accent-soft:#FDEDE8;
+  --shadow:0 2px 12px rgba(28,34,32,.05);
+  --shadow-float:0 8px 28px rgba(28,34,32,.12);
+}
+html,body{margin:0;padding:0}
+body{background:#EDEFEC;color:#1C2220;font-family:'Plus Jakarta Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:var(--ink);text-decoration:none}
+a:hover{color:var(--accent)}
+button,select,input,textarea{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes modalIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media (max-width:980px){
+  [data-shell]{grid-template-columns:1fr !important}
+  [data-side]{position:static !important}
+  [data-scroll]{overflow-x:auto !important}
+  [data-fields]{grid-template-columns:1fr !important}
+}
+@media (max-width:640px){
+  [data-actions]{flex-direction:column !important;align-items:stretch !important}
+}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--bg)">
+
+  <header style="background:var(--bg-warm);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40">
+    <div style="max-width:1240px;margin:0 auto;padding:0 24px;height:74px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <a href="MediConnect Ana Səhifə.dc.html" style="font-size:19px;font-weight:700;letter-spacing:-0.02em;display:flex;align-items:baseline;gap:3px">mediconnect<span style="width:6px;height:6px;border-radius:999px;background:var(--accent);display:inline-block"></span><span style="font-size:13px;font-weight:600;color:var(--muted);margin-left:8px">platforma admin</span></a>
+      <div style="display:flex;align-items:center;gap:18px">
+        <span style="font-size:13px;font-weight:500;color:var(--muted)">21 sentyabr 2026</span>
+        <a href="#" style="font-size:14px;font-weight:600;color:var(--ink)">Çıxış</a>
+      </div>
+    </div>
+  </header>
+
+  <div data-shell style="max-width:1240px;margin:0 auto;padding:28px 24px 88px;display:grid;grid-template-columns:240px 1fr;gap:24px;align-items:start">
+
+    <aside data-side style="position:sticky;top:98px;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px">
+      <div style="display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line)">
+        <div style="width:44px;height:44px;flex:0 0 44px;border-radius:999px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--ink-soft)">FM</div>
+        <div>
+          <div style="font-size:15px;font-weight:600">Fərid Mustafayev</div>
+          <div style="font-size:13px;font-weight:500;color:var(--muted)">Super Admin</div>
+        </div>
+      </div>
+      <nav style="display:flex;flex-direction:column;gap:4px;margin-top:14px">
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+          <button type="button" onClick="{{ n.onPick }}" style="{{ n.style }}">
+            <span style="flex:1;text-align:left">{{ n.label }}</span>
+            <span style="{{ n.badgeStyle }}">{{ n.badge }}</span>
+          </button>
+        </sc-for>
+      </nav>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;font-weight:500;color:var(--muted);line-height:1.6">Səlahiyyət ≠ məlumat. Bu rol platformanı idarə edir, tibbi məzmunu oxumur.</div>
+    </aside>
+
+    <main style="min-width:0">
+      <h1 style="margin:0 0 22px;font-size:34px;font-weight:700;letter-spacing:-0.02em">{{ pageTitle }}</h1>
+
+      <sc-if value="{{ isClinics }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <sc-if value="{{ hasPending }}" hint-placeholder-val="{{ true }}">
+            <div style="background:#FBEFE0;border:2px solid #B5741A;border-radius:18px;padding:20px">
+              <div style="display:flex;align-items:center;gap:10px">
+                <span style="width:22px;height:22px;flex:0 0 22px;border-radius:999px;background:#B5741A;color:#FFFFFF;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">!</span>
+                <span style="font-size:16px;font-weight:700;color:#7A4E11">{{ pendingText }}</span>
+              </div>
+              <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#7A4E11;max-width:70ch">Verifikasiya tamamlanana qədər klinika pasientlərə görünmür və həkim əlavə edə bilmir.</p>
+            </div>
+          </sc-if>
+
+          <section data-scroll style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:22px">
+            <div style="min-width:920px">
+              <div style="display:grid;grid-template-columns:1.4fr 1fr .8fr 1.1fr 1.1fr 1fr auto;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--muted)">
+                <span>Klinika</span><span>Növ</span><span>Şəhər</span><span>Qeydiyyat</span><span>Lisenziya</span><span>Status</span><span>Hərəkət</span>
+              </div>
+              <sc-for list="{{ clinics }}" as="c" hint-placeholder-count="5">
+                <div style="display:grid;grid-template-columns:1.4fr 1fr .8fr 1.1fr 1.1fr 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)">
+                  <span style="font-size:15px;font-weight:600">{{ c.name }}</span>
+                  <span style="font-size:13px;font-weight:500;color:var(--ink-soft)">{{ c.type }}</span>
+                  <span style="font-size:13px;font-weight:500;color:var(--ink-soft)">{{ c.city }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--ink-soft)">{{ c.reg }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--ink-soft)">{{ c.license }}</span>
+                  <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600"><span style="{{ c.dotStyle }}"></span>{{ c.status }}</span>
+                  <button type="button" onClick="{{ c.onAction }}" style="{{ c.actionStyle }}">{{ c.actionLabel }}</button>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isUsers }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="background:#FBEFE0;border:2px solid #B5741A;border-radius:18px;padding:20px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="width:22px;height:22px;flex:0 0 22px;border-radius:999px;background:#B5741A;color:#FFFFFF;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">!</span>
+              <span style="font-size:16px;font-weight:700;color:#7A4E11">Səlahiyyət ≠ məlumat</span>
+            </div>
+            <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#7A4E11;max-width:70ch">Super Admin hesabı bloklaya, rol dəyişə və klinika təyin edə bilər. Pasientin şikayəti, diaqnozu, reseptləri və sənədləri bu rola bağlıdır — cəhd edildikdə sorğu rədd olunur və audit loga yazılır.</p>
+          </div>
+
+          <section data-scroll style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:22px">
+            <div style="min-width:900px">
+              <div style="display:grid;grid-template-columns:1.3fr .9fr 1fr 1fr 1.1fr auto;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--muted)">
+                <span>Ad</span><span>FIN</span><span>Rol</span><span>Status</span><span>Son giriş</span><span>Hərəkət</span>
+              </div>
+              <sc-for list="{{ users }}" as="u" hint-placeholder-count="5">
+                <div style="display:grid;grid-template-columns:1.3fr .9fr 1fr 1fr 1.1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)">
+                  <span style="font-size:15px;font-weight:600">{{ u.name }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--ink-soft)">{{ u.fin }}</span>
+                  <span style="font-size:13px;font-weight:500;color:var(--ink-soft)">{{ u.role }}</span>
+                  <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600"><span style="{{ u.dotStyle }}"></span>{{ u.status }}</span>
+                  <span style="font-size:13px;font-weight:500;color:var(--ink-soft)">{{ u.lastLogin }}</span>
+                  <span style="display:flex;gap:8px">
+                    <button type="button" onClick="{{ u.onMedical }}" style="height:34px;padding:0 14px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="border-color:#C4453A;color:#C4453A">Tibbi məlumat</button>
+                    <button type="button" onClick="{{ u.onBlock }}" style="height:34px;padding:0 14px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="border-color:var(--accent)">{{ u.blockLabel }}</button>
+                  </span>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isModeration }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:70ch">{{ moderationCount }}</p>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="3">
+              <article style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px">
+                  <span style="color:var(--accent);font-size:14px;letter-spacing:2px">{{ r.stars }}</span>
+                  <span style="font-size:15px;font-weight:600">{{ r.author }}</span>
+                  <span style="font-size:13px;font-weight:500;color:var(--muted)">{{ r.target }}</span>
+                </div>
+                <p style="margin:14px 0 0;font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:70ch">{{ r.text }}</p>
+                <sc-if value="{{ r.hasFlag }}" hint-placeholder-val="{{ true }}">
+                  <div style="margin-top:16px;background:#FAE7E5;border:2px solid #C4453A;border-radius:14px;padding:16px">
+                    <div style="display:flex;align-items:center;gap:10px">
+                      <span style="width:22px;height:22px;flex:0 0 22px;border-radius:999px;background:#C4453A;color:#FFFFFF;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">!</span>
+                      <span style="font-size:16px;font-weight:700;color:#8E2F27">Avtomatik filtr</span>
+                    </div>
+                    <div style="font-size:15px;font-weight:600;color:#8E2F27;margin-top:10px;line-height:1.5">{{ r.flag }}</div>
+                  </div>
+                </sc-if>
+                <div data-actions style="display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)">
+                  <button type="button" onClick="{{ r.onApprove }}" style="height:40px;padding:0 18px;border-radius:999px;background:var(--surface);border:1px solid var(--ink);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="background:var(--ink);color:var(--bg-warm)">Təsdiqlə</button>
+                  <button type="button" onClick="{{ r.onReject }}" style="height:40px;padding:0 18px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="border-color:#C4453A;color:#C4453A">Rədd et</button>
+                </div>
+              </article>
+            </sc-for>
+          </div>
+          <sc-if value="{{ moderationEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:44px 22px">
+              <h3 style="margin:0;font-size:22px;font-weight:700">Növbə boşdur</h3>
+              <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:60ch">Bütün rəylər baxılıb. Yeni rəy daxil olduqda burada görünəcək.</p>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:70ch">Parametrlər kodda deyil, bazada saxlanılır. Dəyişiklik dərhal qüvvəyə minir və audit loga yazılır — yenidən yerləşdirmə tələb olunmur.</p>
+          <div style="display:flex;flex-direction:column;gap:20px">
+            <sc-for list="{{ settingGroups }}" as="g" hint-placeholder-count="5">
+              <section data-scroll style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px">
+                <h2 style="margin:0 0 16px;font-size:22px;font-weight:700">{{ g.title }}</h2>
+                <div style="min-width:680px">
+                  <div style="display:grid;grid-template-columns:1.2fr 1.6fr 200px;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--muted)">
+                    <span>Açar</span><span>Təyinatı</span><span>Dəyər</span>
+                  </div>
+                  <sc-for list="{{ g.items }}" as="p" hint-placeholder-count="4">
+                    <div style="display:grid;grid-template-columns:1.2fr 1.6fr 200px;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)">
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--ink)">{{ p.key }}</span>
+                      <span style="font-size:15px;font-weight:500;color:var(--ink-soft)">{{ p.desc }}</span>
+                      <input type="text" value="{{ p.value }}" onChange="{{ p.onChange }}" style="width:100%;height:42px;border:1px solid var(--line);border-radius:12px;padding:0 12px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--ink);background:var(--surface)">
+                    </div>
+                  </sc-for>
+                </div>
+              </section>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isAudit }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="background:#FBEFE0;border:2px solid #B5741A;border-radius:18px;padding:20px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="width:22px;height:22px;flex:0 0 22px;border-radius:999px;background:#B5741A;color:#FFFFFF;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center">!</span>
+              <span style="font-size:16px;font-weight:700;color:#7A4E11">Qeydlər yalnız əlavə olunur</span>
+            </div>
+            <p style="margin:10px 0 0;font-size:15px;line-height:1.6;color:#7A4E11;max-width:70ch">Audit qeydi dəyişdirilə və silinə bilməz. Heç bir rol — Super Admin də daxil olmaqla — mövcud sətri redaktə edə bilmir; düzəliş yalnız yeni qeyd əlavə etməklə aparılır.</p>
+          </div>
+
+          <section data-scroll style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:22px">
+            <h2 style="margin:0 0 16px;font-size:22px;font-weight:700">Əməliyyat qeydləri</h2>
+            <div style="min-width:940px">
+              <div style="display:grid;grid-template-columns:1.1fr 1.1fr .9fr 1.2fr 1.1fr 1.4fr;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--muted)">
+                <span>Vaxt</span><span>İstifadəçi</span><span>Rol</span><span>Əməliyyat</span><span>Obyekt</span><span>Səbəb</span>
+              </div>
+              <sc-for list="{{ auditLog }}" as="l" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:1.1fr 1.1fr .9fr 1.2fr 1.1fr 1.4fr;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--ink-soft)">{{ l.time }}</span>
+                  <span style="font-size:15px;font-weight:600">{{ l.user }}</span>
+                  <span style="{{ l.roleStyle }}">{{ l.role }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--ink)">{{ l.action }}</span>
+                  <span style="font-size:13px;font-weight:500;color:var(--ink-soft)">{{ l.object }}</span>
+                  <span style="font-size:13px;font-weight:500;color:var(--ink-soft)">{{ l.reason }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+
+          <section data-scroll style="background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:20px">
+            <h2 style="margin:0 0 16px;font-size:22px;font-weight:700">Təhlükəsizlik hadisələri</h2>
+            <div style="min-width:880px">
+              <div style="display:grid;grid-template-columns:1.1fr 1.2fr .9fr 1.6fr 1fr;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--muted)">
+                <span>Vaxt</span><span>İstifadəçi</span><span>Rol</span><span>Hadisə</span><span>Şiddət</span>
+              </div>
+              <sc-for list="{{ securityLog }}" as="e" hint-placeholder-count="5">
+                <div style="display:grid;grid-template-columns:1.1fr 1.2fr .9fr 1.6fr 1fr;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--ink-soft)">{{ e.time }}</span>
+                  <span style="font-size:15px;font-weight:600">{{ e.user }}</span>
+                  <span style="{{ e.roleStyle }}">{{ e.role }}</span>
+                  <span style="font-size:13px;font-weight:500;color:var(--ink-soft)">{{ e.event }}</span>
+                  <span style="{{ e.sevStyle }}">{{ e.severity }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+        </div>
+      </sc-if>
+    </main>
+  </div>
+
+  <sc-if value="{{ verifyOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:60;background:rgba(28,34,32,.45);display:flex;align-items:center;justify-content:center;padding:24px">
+      <div role="dialog" aria-modal="true" style="width:100%;max-width:560px;max-height:88vh;overflow-y:auto;background:var(--surface);border-radius:18px;padding:26px;box-shadow:var(--shadow-float);animation:modalIn .18s ease-out">
+        <h2 style="margin:0 0 6px;font-size:22px;font-weight:700">{{ verifyName }}</h2>
+        <p style="margin:0 0 18px;font-size:15px;line-height:1.6;color:var(--ink-soft)">{{ verifyMeta }}</p>
+        <div data-fields style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <sc-for list="{{ verifyFields }}" as="f" hint-placeholder-count="4">
+            <div style="background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px 16px">
+              <div style="font-size:13px;font-weight:600;color:var(--muted)">{{ f.k }}</div>
+              <div style="font-size:15px;font-weight:600;color:var(--ink-soft);margin-top:6px">{{ f.v }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:20px">
+          <div style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:10px">YÜKLƏNMİŞ SƏNƏDLƏR</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ verifyDocs }}" as="d" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:10px;background:var(--bg-warm);border-radius:12px;padding:12px 14px">
+                <span style="width:20px;height:20px;flex:0 0 20px;border-radius:999px;background:#2F7D67;color:#FFFFFF;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center">✓</span>
+                <span style="font-size:15px;font-weight:500">{{ d }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <sc-if value="{{ rejectMode }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:18px">
+            <label style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px">Rədd səbəbi</label>
+            <textarea value="{{ rejectReason }}" onChange="{{ onRejectReason }}" rows="3" placeholder="Hansı sənəd və ya məlumat çatışmır?" style="width:100%;border:1px solid var(--line);border-radius:14px;padding:14px;font-size:15px;line-height:1.6;color:var(--ink);background:var(--surface);resize:vertical"></textarea>
+          </div>
+        </sc-if>
+        <div data-actions style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:22px">
+          <sc-if value="{{ verifyMode }}" hint-placeholder-val="{{ true }}">
+            <button type="button" onClick="{{ onVerifyConfirm }}" style="height:46px;padding:0 24px;border-radius:999px;background:var(--accent);border:none;color:#FFFFFF;font-size:15px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="filter:brightness(.94)">Verifikasiya et və admin təyin et</button>
+          </sc-if>
+          <sc-if value="{{ verifyMode }}" hint-placeholder-val="{{ true }}">
+            <button type="button" onClick="{{ onRejectMode }}" style="height:46px;padding:0 24px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--ink);font-size:14px;font-weight:600;white-space:nowrap;cursor:pointer" style-hover="border-color:#C4453A;color:#C4453A">Rədd et</button>
+          </sc-if>
+          <sc-if value="{{ rejectMode }}" hint-placeholder-val="{{ false }}">
+            <button type="button" disabled="{{ rejectBlocked }}" onClick="{{ onRejectConfirm }}" style="{{ rejectBtnStyle }}">Rəddi təsdiqlə</button>
+          </sc-if>
+          <button type="button" onClick="{{ onCloseModal }}" style="background:none;border:none;padding:0;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer" style-hover="color:var(--accent)">Bağla</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ blockOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:62;background:rgba(28,34,32,.45);display:flex;align-items:center;justify-content:center;padding:24px">
+      <div role="dialog" aria-modal="true" style="width:100%;max-width:500px;background:var(--surface);border-radius:18px;padding:26px;box-shadow:var(--shadow-float);animation:modalIn .18s ease-out">
+        <h2 style="margin:0 0 6px;font-size:22px;font-weight:700">{{ blockTitle }}</h2>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:var(--ink-soft)">{{ blockSummary }}</p>
+        <sc-if value="{{ blockHasAppts }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FBEFE0;border:2px solid #B5741A;border-radius:14px;padding:16px;margin-bottom:16px">
+            <div style="font-size:16px;font-weight:700;color:#7A4E11">Aktiv randevular var</div>
+            <div style="font-size:15px;font-weight:600;color:#7A4E11;margin-top:8px;line-height:1.5">{{ blockApptText }}</div>
+          </div>
+        </sc-if>
+        <label style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px">Səbəb</label>
+        <textarea value="{{ blockReason }}" onChange="{{ onBlockReason }}" rows="3" placeholder="Bloklamanın səbəbini yazın" style="width:100%;border:1px solid var(--line);border-radius:14px;padding:14px;font-size:15px;line-height:1.6;color:var(--ink);background:var(--surface);resize:vertical"></textarea>
+        <p style="margin:10px 0 0;font-size:13px;font-weight:500;color:var(--muted)">Səbəb audit loga yazılır və silinə bilmir.</p>
+        <div data-actions style="display:flex;align-items:center;gap:14px;margin-top:20px">
+          <button type="button" disabled="{{ blockBlocked }}" onClick="{{ onBlockConfirm }}" style="{{ blockBtnStyle }}">{{ blockConfirmLabel }}</button>
+          <button type="button" onClick="{{ onCloseModal }}" style="background:none;border:none;padding:0;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer" style-hover="color:var(--accent)">Bağla</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ reviewRejectOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:62;background:rgba(28,34,32,.45);display:flex;align-items:center;justify-content:center;padding:24px">
+      <div role="dialog" aria-modal="true" style="width:100%;max-width:500px;background:var(--surface);border-radius:18px;padding:26px;box-shadow:var(--shadow-float);animation:modalIn .18s ease-out">
+        <h2 style="margin:0 0 6px;font-size:22px;font-weight:700">Rəyi rədd et</h2>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:var(--ink-soft)">{{ reviewRejectSummary }}</p>
+        <label style="display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px">Rədd səbəbi</label>
+        <select value="{{ reviewReason }}" onChange="{{ onReviewReason }}" style="width:100%;height:46px;border:1px solid var(--line);border-radius:14px;padding:0 14px;font-size:15px;font-weight:500;color:var(--ink);background:var(--surface);cursor:pointer">
+          <option>Səbəb seçin</option>
+          <option>Şəxsi məlumat var</option>
+          <option>Təhqir və ya söyüş</option>
+          <option>Tibbi məsləhət xarakteri daşıyır</option>
+          <option>Reklam</option>
+          <option>Randevu təsdiqlənmir</option>
+        </select>
+        <div data-actions style="display:flex;align-items:center;gap:14px;margin-top:20px">
+          <button type="button" disabled="{{ reviewRejectBlocked }}" onClick="{{ onReviewRejectConfirm }}" style="{{ reviewRejectBtnStyle }}">Rəddi təsdiqlə</button>
+          <button type="button" onClick="{{ onCloseModal }}" style="background:none;border:none;padding:0;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer" style-hover="color:var(--accent)">Bağla</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="position:fixed;right:24px;bottom:24px;z-index:70;display:flex;flex-direction:column;gap:10px;align-items:flex-end;pointer-events:none">
+    <sc-for list="{{ toasts }}" as="t" hint-placeholder-count="0">
+      <div style="{{ t.style }}">
+        <div style="{{ t.titleStyle }}">{{ t.title }}</div>
+        <div style="font-size:13px;font-weight:500;color:var(--ink-soft);margin-top:4px;line-height:1.5">{{ t.body }}</div>
+      </div>
+    </sc-for>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1240}}">
+const NAV = [
+  {id:'clinics', label:'Klinikalar'},
+  {id:'users', label:'İstifadəçilər'},
+  {id:'moderation', label:'Moderasiya'},
+  {id:'settings', label:'Sistem parametrləri'},
+  {id:'audit', label:'Audit log'}
+];
+const CST = {
+  verified:{label:'Verifikasiya olunub', color:'#2F7D67'},
+  pending:{label:'Verifikasiya gözlənilir', color:'#B5741A'},
+  rejected:{label:'Rədd edilib', color:'#C4453A'},
+  suspended:{label:'Dayandırılıb', color:'#C4453A'}
+};
+const UST = {
+  active:{label:'Aktiv', color:'#2F7D67'},
+  blocked:{label:'Bloklanıb', color:'#C4453A'},
+  invited:{label:'Dəvət göndərilib', color:'#B5741A'}
+};
+const SETTINGS = [
+  {title:'Təhlükəsizlik', items:[
+    {key:'auth.otp_ttl_seconds', desc:'SMS ilə gələn OTP kodunun etibarlılıq müddəti', value:'120'},
+    {key:'auth.otp_resend_seconds', desc:'Yeni OTP istəmək üçün gözləmə müddəti', value:'60'},
+    {key:'auth.max_login_attempts', desc:'Uğursuz giriş cəhdlərinin limiti', value:'5'},
+    {key:'auth.lockout_minutes', desc:'Limit aşılanda hesabın bağlı qalma müddəti', value:'30'},
+    {key:'session.idle_timeout_minutes', desc:'Hərəkətsizlikdən sonra sessiyanın bitməsi', value:'20'}
+  ]},
+  {title:'Randevu', items:[
+    {key:'booking.slot_hold_seconds', desc:'Seçilmiş slotun saxlanma müddəti', value:'600'},
+    {key:'booking.min_lead_minutes', desc:'Randevuya qədər minimum vaxt', value:'60'},
+    {key:'booking.cancel_window_minutes', desc:'Pulsuz ləğv üçün son hədd', value:'60'},
+    {key:'booking.max_active_per_patient', desc:'Bir pasientin eyni vaxtda aktiv randevu sayı', value:'5'},
+    {key:'booking.no_show_threshold', desc:'Bloklamadan əvvəl gəlməmə sayı', value:'3'}
+  ]},
+  {title:'Bildiriş', items:[
+    {key:'notify.reminder_hours', desc:'Randevudan əvvəl xatırlatma saatları', value:'24,2'},
+    {key:'notify.sms_enabled', desc:'SMS kanalının aktivliyi', value:'true'},
+    {key:'notify.quiet_hours', desc:'Bildiriş göndərilməyən saat aralığı', value:'22:00-08:00'},
+    {key:'notify.retry_count', desc:'Çatdırılmayan bildirişin təkrar cəhdi', value:'3'}
+  ]},
+  {title:'Sənəd', items:[
+    {key:'docs.max_file_mb', desc:'Yüklənən faylın maksimum ölçüsü', value:'20'},
+    {key:'docs.allowed_types', desc:'İcazə verilən fayl növləri', value:'pdf,jpg,png'},
+    {key:'docs.default_grant_hours', desc:'Paylaşma icazəsinin standart müddəti', value:'24'},
+    {key:'docs.download_blocked', desc:'Həkim tərəfindən yükləmənin bağlanması', value:'true'},
+    {key:'docs.virus_scan_required', desc:'Yüklənən faylın antivirus yoxlaması', value:'true'}
+  ]},
+  {title:'Resept', items:[
+    {key:'rx.signature_required', desc:'Rəqəmsal imza olmadan reseptin etibarsızlığı', value:'true'},
+    {key:'rx.default_validity_days', desc:'Reseptin standart etibarlılıq müddəti', value:'90'},
+    {key:'rx.controlled_confirm', desc:'Nəzarətdə olan dərman üçün ayrıca təsdiq', value:'true'},
+    {key:'rx.allergy_override_reason', desc:'Allergiya toqquşmasında əsaslandırma tələbi', value:'true'},
+    {key:'rx.qr_ttl_minutes', desc:'Aptek üçün QR kodun etibarlılığı', value:'5'}
+  ]}
+];
+const AUDIT = [
+  {time:'21.09.2026 09:42', user:'Fərid Mustafayev', role:'Super Admin', action:'clinic.verify', object:'Şəfa Hospital', reason:'Sənədlər tam'},
+  {time:'21.09.2026 09:05', user:'Səbinə Əhmədova', role:'Klinika admin', action:'doctor.invite', object:'AZ-DRM-50117', reason:'Yeni dermatoloq'},
+  {time:'20.09.2026 18:20', user:'Səbinə Əhmədova', role:'Klinika admin', action:'schedule.close_day', object:'Dr. A. Məmmədova · 22.09', reason:'Həkim xəstələnib'},
+  {time:'20.09.2026 16:58', user:'Dr. A. Məmmədova', role:'Həkim', action:'rx.sign', object:'RX-2026-0920-4471', reason:'—'},
+  {time:'20.09.2026 14:03', user:'Nigar Səlimova', role:'Pasient', action:'document.grant', object:'EKQ nəticəsi', reason:'Randevu müddətincə'},
+  {time:'19.09.2026 11:15', user:'Fərid Mustafayev', role:'Super Admin', action:'setting.update', object:'booking.slot_hold_seconds', reason:'600-ə qaldırıldı'}
+];
+const SECURITY = [
+  {time:'21.09.2026 10:11', user:'Səbinə Əhmədova', role:'Klinika admin', event:'Tibbi məzmuna giriş cəhdi — 403', severity:'Yüksək'},
+  {time:'21.09.2026 09:48', user:'Fərid Mustafayev', role:'Super Admin', event:'Pasient sənədinə giriş cəhdi — 403', severity:'Yüksək'},
+  {time:'20.09.2026 22:34', user:'naməlum', role:'—', event:'5 uğursuz giriş cəhdi, hesab müvəqqəti bağlandı', severity:'Orta'},
+  {time:'20.09.2026 17:02', user:'Dr. R. Hüseynov', role:'Həkim', event:'İcazəsi bitmiş sənədə giriş cəhdi — 403', severity:'Orta'},
+  {time:'19.09.2026 13:27', user:'Səbinə Əhmədova', role:'Klinika admin', event:'Resept faylını yükləmə cəhdi — 403', severity:'Yüksək'}
+];
+
+class Component extends DCLogic {
+  state = {
+    page:'clinics', toasts:[],
+    clinics:[
+      {id:'c1', name:'Mərkəzi Klinika', type:'Ambulator klinika', city:'Bakı', reg:'1402-AZ-00873', license:'SHL-2008-0412', status:'verified'},
+      {id:'c2', name:'Kaspi Tibb Mərkəzi', type:'Çoxprofilli mərkəz', city:'Bakı', reg:'1402-AZ-01194', license:'SHL-2012-0771', status:'verified'},
+      {id:'c3', name:'Sağlam Ailə', type:'Ailə klinikası', city:'Sumqayıt', reg:'1408-AZ-00312', license:'SHL-2016-1180', status:'verified'},
+      {id:'c4', name:'Şəfa Hospital', type:'Hospital', city:'Gəncə', reg:'1420-AZ-00047', license:'SHL-2019-0233', status:'pending'},
+      {id:'c5', name:'Nur Diaqnostika', type:'Diaqnostika mərkəzi', city:'Bakı', reg:'1402-AZ-02016', license:'SHL-2024-0088', status:'pending'}
+    ],
+    users:[
+      {id:'u1', name:'Nigar Səlimova', fin:'5AB12CD', role:'Pasient', status:'active', lastLogin:'21.09.2026 08:40', appts:2},
+      {id:'u2', name:'Dr. Aygün Məmmədova', fin:'3KL88MN', role:'Həkim', status:'active', lastLogin:'21.09.2026 09:02', appts:14},
+      {id:'u3', name:'Səbinə Əhmədova', fin:'7QR21ST', role:'Klinika admin', status:'active', lastLogin:'21.09.2026 09:58', appts:0},
+      {id:'u4', name:'Dr. Kamran Quliyev', fin:'9XY44ZW', role:'Həkim', status:'blocked', lastLogin:'14.09.2026 16:22', appts:0},
+      {id:'u5', name:'Orxan Səfərov', fin:'2MN77PQ', role:'Pasient', status:'active', lastLogin:'20.09.2026 19:11', appts:1}
+    ],
+    reviews:[
+      {id:'r1', stars:'★★★★★', author:'Elçin M.', target:'Dr. Aygün Məmmədova · Kardioloq', text:'Müayinə vaxtında başladı, analizləri ətraflı izah etdi.', flag:''},
+      {id:'r2', stars:'★★★★☆', author:'Günel R.', target:'Dr. Rəşad Hüseynov · Nevroloq', text:'Həkim yaxşıdır, amma zəng etsəniz 0501234567 nömrəsindən məni tapa bilərsiniz, təcrübəmi danışaram.', flag:'Şəxsi məlumat aşkarlandı: telefon nömrəsi.'},
+      {id:'r3', stars:'★★☆☆☆', author:'Anonim', target:'Dr. Leyla Əliyeva · Pediatr', text:'Uşağıma yazılan dərmanı qonşum da içir, sizə də məsləhət görürəm, resept lazım deyil.', flag:'Tibbi məsləhət xarakteri aşkarlandı: reseptsiz dərman tövsiyəsi.'}
+    ],
+    settings:SETTINGS.map(g => ({title:g.title, items:g.items.map(i => Object.assign({}, i))})),
+    verifyOpen:false, verifyId:null, rejectMode:false, rejectReason:'',
+    blockOpen:false, blockId:null, blockReason:'',
+    reviewRejectOpen:false, reviewId:null, reviewReason:'Səbəb seçin'
+  };
+
+  componentWillUnmount(){ this.setState({toasts:[]}); }
+  toast(title, body, danger){
+    const id = Date.now() + Math.random();
+    this.setState(s => ({toasts:s.toasts.concat([{id, title, body, danger}])}));
+    setTimeout(() => this.setState(s => ({toasts:s.toasts.filter(t => t.id !== id)})), 4000);
+  }
+  dot(c){ return 'width:9px;height:9px;flex:0 0 9px;border-radius:999px;background:' + c + ';display:block'; }
+  roleTag(role){
+    const map = {'Super Admin':'#C4453A', 'Klinika admin':'#B5741A', 'Həkim':'#2F7D67', 'Pasient':'#5A6360', '—':'#8C9490'};
+    const c = map[role] || '#5A6360';
+    return 'display:inline-flex;align-items:center;border:1px solid ' + c + ';color:' + c + ';border-radius:999px;padding:3px 10px;font-size:13px;font-weight:600;white-space:nowrap';
+  }
+  solid(enabled, color){
+    return 'height:46px;padding:0 24px;border-radius:999px;border:none;background:' + (color || 'var(--accent)') + ';color:#FFFFFF;font-size:15px;font-weight:600;white-space:nowrap;opacity:'
+      + (enabled ? '1' : '.45') + ';cursor:' + (enabled ? 'pointer' : 'not-allowed');
+  }
+
+  renderVals(){
+    const s = this.state;
+    const page = s.page;
+    const pending = s.clinics.filter(c => c.status === 'pending');
+    const vc = s.clinics.find(c => c.id === s.verifyId);
+    const bu = s.users.find(u => u.id === s.blockId);
+    const rv = s.reviews.find(r => r.id === s.reviewId);
+
+    return {
+      navItems: NAV.map(n => {
+        const badge = n.id === 'clinics' && pending.length ? String(pending.length)
+          : n.id === 'moderation' && s.reviews.length ? String(s.reviews.length) : '';
+        return {
+          label:n.label, badge,
+          badgeStyle: badge ? 'min-width:22px;height:22px;border-radius:999px;background:var(--accent);color:#FFFFFF;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 6px' : 'display:none',
+          style:'display:flex;align-items:center;gap:8px;padding:11px 14px;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;background:'
+            + (page === n.id ? 'var(--accent-soft)' : 'transparent') + ';color:' + (page === n.id ? 'var(--accent)' : 'var(--ink)'),
+          onPick: () => this.setState({page:n.id})
+        };
+      }),
+      pageTitle:(NAV.find(n => n.id === page) || {}).label,
+      isClinics:page === 'clinics', isUsers:page === 'users', isModeration:page === 'moderation',
+      isSettings:page === 'settings', isAudit:page === 'audit',
+
+      hasPending: pending.length > 0,
+      pendingText: pending.length + ' klinika verifikasiya gözləyir',
+      clinics: s.clinics.map(c => ({
+        name:c.name, type:c.type, city:c.city, reg:c.reg, license:c.license,
+        status:CST[c.status].label, dotStyle:this.dot(CST[c.status].color),
+        actionLabel: c.status === 'pending' ? 'Verifikasiya' : c.status === 'verified' ? 'Dayandır' : 'Yenidən bax',
+        actionStyle:'height:34px;padding:0 14px;border-radius:999px;background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;border:1px solid '
+          + (c.status === 'pending' ? 'var(--accent)' : 'var(--line)'),
+        onAction: () => {
+          if (c.status === 'verified'){
+            this.setState(st => ({clinics:st.clinics.map(x => x.id === c.id ? Object.assign({}, x, {status:'suspended'}) : x)}));
+            this.toast('Klinika dayandırıldı', c.name + ' pasientlərə görünmür. Qeyd audit loga yazıldı.');
+          } else {
+            this.setState({verifyOpen:true, verifyId:c.id, rejectMode:false, rejectReason:''});
+          }
+        }
+      })),
+      verifyOpen:s.verifyOpen,
+      verifyName: vc ? vc.name : '',
+      verifyMeta: vc ? vc.type + ' · ' + vc.city : '',
+      verifyFields: vc ? [
+        {k:'Qeydiyyat nömrəsi', v:vc.reg},
+        {k:'Lisenziya', v:vc.license},
+        {k:'Növ', v:vc.type},
+        {k:'Şəhər', v:vc.city}
+      ] : [],
+      verifyDocs:['Dövlət qeydiyyat şəhadətnaməsi', 'Səhiyyə fəaliyyəti lisenziyası', 'Hüquqi ünvan sənədi', 'Rəhbərin vəsiqəsi'],
+      verifyMode: !s.rejectMode,
+      rejectMode:s.rejectMode,
+      rejectReason:s.rejectReason,
+      onRejectMode: () => this.setState({rejectMode:true, rejectReason:''}),
+      onRejectReason: e => this.setState({rejectReason:e.target.value}),
+      rejectBlocked: s.rejectReason.trim().length === 0,
+      rejectBtnStyle: this.solid(s.rejectReason.trim().length > 0, '#C4453A'),
+      onVerifyConfirm: () => {
+        this.setState(st => ({clinics:st.clinics.map(x => x.id === st.verifyId ? Object.assign({}, x, {status:'verified'}) : x), verifyOpen:false}));
+        this.toast('Klinika verifikasiya olundu', (vc ? vc.name : '') + ' üçün admin dəvəti göndərildi.');
+      },
+      onRejectConfirm: () => {
+        if (!s.rejectReason.trim()) return;
+        this.setState(st => ({clinics:st.clinics.map(x => x.id === st.verifyId ? Object.assign({}, x, {status:'rejected'}) : x), verifyOpen:false, rejectMode:false}));
+        this.toast('Klinika rədd edildi', 'Səbəb klinikaya göndərildi və audit loga yazıldı.');
+      },
+
+      users: s.users.map(u => ({
+        name:u.name, fin:u.fin, role:u.role, lastLogin:u.lastLogin,
+        status:UST[u.status].label, dotStyle:this.dot(UST[u.status].color),
+        blockLabel: u.status === 'blocked' ? 'Blokdan çıxar' : 'Blokla',
+        onMedical: () => this.toast('403 — Giriş qadağandır', 'Tibbi məlumat heç bir admin rolu üçün açıq deyil. Cəhd audit loga yazıldı.', true),
+        onBlock: () => {
+          if (u.status === 'blocked'){
+            this.setState(st => ({users:st.users.map(x => x.id === u.id ? Object.assign({}, x, {status:'active'}) : x)}));
+            this.toast('Blok götürüldü', u.name + ' yenidən daxil ola bilər.');
+            return;
+          }
+          this.setState({blockOpen:true, blockId:u.id, blockReason:''});
+        }
+      })),
+      blockOpen:s.blockOpen,
+      blockTitle: bu ? bu.name + ' hesabını blokla' : '',
+      blockSummary: bu ? bu.role + ' · FIN ' + bu.fin + ' · son giriş ' + bu.lastLogin : '',
+      blockHasAppts: !!(bu && bu.role === 'Həkim' && bu.appts > 0),
+      blockApptText: bu ? bu.appts + ' aktiv randevu var. Bloklandıqda bu randevular avtomatik ləğv olunmur — klinika admini hər birini köçürməli və ya ləğv etməlidir.' : '',
+      blockReason:s.blockReason,
+      onBlockReason: e => this.setState({blockReason:e.target.value}),
+      blockBlocked: s.blockReason.trim().length === 0,
+      blockBtnStyle: this.solid(s.blockReason.trim().length > 0, '#C4453A'),
+      blockConfirmLabel:'Hesabı blokla',
+      onBlockConfirm: () => {
+        if (!s.blockReason.trim()) return;
+        this.setState(st => ({users:st.users.map(x => x.id === st.blockId ? Object.assign({}, x, {status:'blocked'}) : x), blockOpen:false}));
+        this.toast('Hesab bloklandı', 'Səbəb audit loga yazıldı və dəyişdirilə bilmir.');
+      },
+
+      moderationCount: s.reviews.length + ' rəy növbədə. Təsdiqlənən rəy dərhal həkimin profilində görünür.',
+      moderationEmpty: s.reviews.length === 0,
+      reviews: s.reviews.map(r => ({
+        stars:r.stars, author:r.author, target:r.target, text:r.text,
+        hasFlag: !!r.flag, flag:r.flag,
+        onApprove: () => {
+          this.setState(st => ({reviews:st.reviews.filter(x => x.id !== r.id)}));
+          this.toast('Rəy təsdiqləndi', r.target.split(' · ')[0] + ' üçün orta reytinq yenidən hesablandı.');
+        },
+        onReject: () => this.setState({reviewRejectOpen:true, reviewId:r.id, reviewReason:'Səbəb seçin'})
+      })),
+      reviewRejectOpen:s.reviewRejectOpen,
+      reviewRejectSummary: rv ? rv.author + ' · ' + rv.target : '',
+      reviewReason:s.reviewReason,
+      onReviewReason: e => this.setState({reviewReason:e.target.value}),
+      reviewRejectBlocked: s.reviewReason === 'Səbəb seçin',
+      reviewRejectBtnStyle: this.solid(s.reviewReason !== 'Səbəb seçin', '#C4453A'),
+      onReviewRejectConfirm: () => {
+        if (s.reviewReason === 'Səbəb seçin') return;
+        this.setState(st => ({reviews:st.reviews.filter(x => x.id !== st.reviewId), reviewRejectOpen:false}));
+        this.toast('Rəy rədd edildi', 'Müəllifə səbəb göndərildi. Reytinqə təsir etmir.');
+      },
+
+      settingGroups: s.settings.map((g, gi) => ({
+        title:g.title,
+        items:g.items.map((p, pi) => ({
+          key:p.key, desc:p.desc, value:p.value,
+          onChange: e => {
+            const v = e.target.value;
+            this.setState(st => ({settings:st.settings.map((x, xi) => xi !== gi ? x
+              : Object.assign({}, x, {items:x.items.map((y, yi) => yi !== pi ? y : Object.assign({}, y, {value:v}))}))}));
+            this.toast('Parametr yeniləndi', p.key + ' = ' + v);
+          }
+        }))
+      })),
+
+      auditLog: AUDIT.map(l => Object.assign({}, l, {roleStyle:this.roleTag(l.role)})),
+      securityLog: SECURITY.map(e => Object.assign({}, e, {
+        roleStyle:this.roleTag(e.role),
+        sevStyle:'display:inline-flex;align-items:center;border-radius:999px;padding:4px 12px;font-size:13px;font-weight:700;white-space:nowrap;color:#FFFFFF;background:'
+          + (e.severity === 'Yüksək' ? '#C4453A' : e.severity === 'Orta' ? '#B5741A' : '#2F7D67')
+      })),
+
+      onCloseModal: () => this.setState({verifyOpen:false, blockOpen:false, reviewRejectOpen:false, rejectMode:false}),
+
+      toasts: s.toasts.map(t => ({
+        title:t.title, body:t.body,
+        titleStyle:'font-size:15px;font-weight:600;color:' + (t.danger ? '#C4453A' : 'var(--ink)'),
+        style:'pointer-events:auto;width:300px;background:var(--surface);border:1px solid ' + (t.danger ? '#C4453A' : 'var(--accent)')
+          + ';border-radius:14px;padding:16px;box-shadow:var(--shadow-float);animation:toastIn .18s ease-out'
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

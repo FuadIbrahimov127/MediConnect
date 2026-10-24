@@ -1,0 +1,16 @@
+{
+  "name": "mediconnect-website",
+  "private": true,
+  "workspaces": ["shared", "mock-server", "client"],
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c yellow,cyan \"npm run dev -w mock-server\" \"npm run dev -w client\"",
+    "seed": "npm run seed -w mock-server",
+    "typecheck": "npm run typecheck -w shared && npm run typecheck -w mock-server && npm run typecheck -w client",
+    "test": "npm test -w mock-server",
+    "build": "npm run build -w client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "typescript": "~5.9.3"
+  }
+}

@@ -1,0 +1,5 @@
+node_modules/
+dist/
+mock-server/data/
+*.log
+.env.local

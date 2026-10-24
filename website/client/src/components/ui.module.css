@@ -1,0 +1,82 @@
+/* Ortaq UI komponentləri (Button, Logo, Skeleton, EmptyState, Toast). */
+
+.logo { display: inline-flex; align-items: baseline; gap: 3px; font-size: 19px; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
+.logo:hover { color: var(--ink); }
+.logoDot { width: 6px; height: 6px; border-radius: var(--radius-pill); background: var(--accent); display: inline-block; }
+.logoLarge { font-size: clamp(28px, 4vw, 40px); font-weight: 800; letter-spacing: -0.03em; gap: 5px; color: inherit; }
+.logoLarge .logoDot { width: 9px; height: 9px; }
+
+.btn {
+  height: 46px; padding: 0 24px; border-radius: var(--radius-pill);
+  display: inline-flex; align-items: center; justify-content: center; gap: 14px;
+  font-size: 15px; font-weight: 600; white-space: nowrap; cursor: pointer;
+  border: 1px solid transparent; transition: background .15s, color .15s, border-color .15s, filter .15s;
+  text-decoration: none;
+}
+.btn:disabled, .btn[aria-disabled='true'] { opacity: .45; cursor: not-allowed; }
+.primary { background: var(--accent); border-color: var(--accent); color: #FFFFFF; }
+.primary:hover:not(:disabled) { filter: brightness(.94); color: #FFFFFF; }
+.secondary { background: var(--surface); border-color: var(--ink); color: var(--ink); }
+.secondary:hover:not(:disabled) { background: var(--ink); color: var(--bg-warm); }
+.ghost { background: var(--surface); border-color: var(--line); color: var(--ink); }
+.ghost:hover:not(:disabled) { border-color: var(--ink); color: var(--ink); }
+.danger { background: var(--danger); border-color: var(--danger); color: #FFFFFF; }
+.danger:hover:not(:disabled) { filter: brightness(.94); color: #FFFFFF; }
+.link { background: none; border: none; padding: 0; height: auto; color: var(--accent); font-size: 14px; }
+.link:hover:not(:disabled) { text-decoration: underline; color: var(--accent); }
+.small { height: 34px; padding: 0 18px; font-size: 13px; }
+.block { width: 100%; }
+.withArrow { padding-right: 10px; justify-content: space-between; }
+.arrow {
+  width: 32px; height: 32px; flex: 0 0 32px; border-radius: var(--radius-pill);
+  display: inline-flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, .22);
+}
+.secondary .arrow, .ghost .arrow { background: var(--accent-soft); color: var(--accent); }
+.spinner {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid currentColor; border-right-color: transparent;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.skeleton { background: var(--line); border-radius: 10px; animation: mc-pulse 1.4s ease-in-out infinite; }
+
+.empty { text-align: center; padding: 48px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.emptyIcon {
+  width: 56px; height: 56px; border-radius: var(--radius-pill); background: var(--accent-soft); color: var(--accent);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 6px;
+}
+.emptyTitle { font-size: 18px; font-weight: 700; }
+.emptyBody { font-size: 15px; color: var(--ink-soft); max-width: 46ch; }
+
+.toasts {
+  position: fixed; right: 20px; bottom: 20px; z-index: 1000;
+  display: flex; flex-direction: column; gap: 10px; width: min(380px, calc(100vw - 40px));
+}
+.toast {
+  background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent);
+  border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow-float);
+  animation: mc-in .2s ease-out; display: grid; grid-template-columns: 1fr auto; gap: 8px;
+}
+.toastSuccess { border-left-color: var(--success); }
+.toastError { border-left-color: var(--danger); }
+.toastTitle { font-size: 14px; font-weight: 700; }
+.toastBody { font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
+.toastClose { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 18px; line-height: 1; padding: 0 2px; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px;
+  border-radius: var(--radius-pill); font-size: 12px; font-weight: 600; white-space: nowrap;
+}
+.badgeDot { width: 7px; height: 7px; border-radius: var(--radius-pill); background: currentColor; }
+.tone-success { background: var(--success-soft); color: var(--success); }
+.tone-warning { background: var(--warning-soft); color: var(--warning); }
+.tone-danger { background: var(--danger-soft); color: var(--danger); }
+.tone-neutral { background: var(--bg); color: var(--ink-soft); }
+.tone-accent { background: var(--accent-soft); color: var(--accent); }
+
+.avatar {
+  border-radius: var(--radius-pill); background: var(--accent-soft); color: var(--ink-soft);
+  display: inline-flex; align-items: center; justify-content: center; font-weight: 700; flex: 0 0 auto; overflow: hidden;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }

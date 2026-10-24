@@ -1,0 +1,54 @@
+.wrap { display: flex; flex-direction: column; gap: 20px; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tab { border: 1px solid var(--line); background: var(--surface); color: var(--ink-soft); border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.tab[aria-selected='true'] { background: var(--ink); color: var(--bg-warm); border-color: var(--ink); }
+.h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+.calHead { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.nav { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
+.legend { display: flex; gap: 12px; font-size: 12px; font-weight: 600; flex-wrap: wrap; }
+.legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+.lFree::before { background: var(--success-soft); border: 1px solid var(--success); }
+.lBooked::before { background: var(--accent); }
+.lBlocked::before { background: var(--line); }
+.week { display: grid; grid-template-columns: repeat(7, minmax(110px, 1fr)); gap: 8px; overflow-x: auto; }
+.dayCol { display: flex; flex-direction: column; gap: 4px; min-width: 110px; }
+.dayHead { display: flex; flex-direction: column; font-size: 12px; padding: 6px 4px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.dayHead span { color: var(--muted); }
+.off { font-size: 12px; color: var(--muted); padding: 8px 4px; }
+.slot {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 1px; padding: 5px 8px; border-radius: 8px; cursor: pointer;
+  border: 1px solid transparent; font-family: var(--font-mono); font-size: 12px; font-weight: 600; text-align: left;
+}
+.slot small { font-family: var(--font); font-size: 11px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.st_AVAILABLE { background: var(--success-soft); color: var(--success); border-color: color-mix(in srgb, var(--success) 30%, transparent); }
+.st_BOOKED { background: var(--accent); color: #fff; }
+.st_BLOCKED { background: var(--bg); color: var(--muted); text-decoration: line-through; }
+.st_SOFT_LOCKED { background: var(--warning-soft); color: var(--warning); }
+.past { opacity: .45; }
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table th { text-align: left; font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; padding: 0 8px 8px 0; }
+.table td { padding: 10px 8px 10px 0; border-top: 1px solid var(--line); }
+.form { display: flex; flex-direction: column; gap: 10px; }
+.dayRow { display: grid; grid-template-columns: 170px 1fr auto; gap: 14px; padding: 12px 0; border-top: 1px solid var(--line); align-items: start; }
+.dayName { display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
+.dayName span { font-size: 12px; }
+.intervals { display: flex; flex-direction: column; gap: 10px; }
+.interval { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; }
+.interval label, .exForm label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 600; color: var(--ink-soft); }
+.interval .input { height: 40px; padding: 0 10px; width: auto; min-width: 96px; }
+.breaks { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.break { display: inline-flex; gap: 4px; align-items: center; background: var(--bg-warm); padding: 4px 6px; border-radius: 10px; }
+.break .input { min-width: 86px; height: 34px; }
+.x { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--muted); cursor: pointer; }
+.x:hover { color: var(--danger); border-color: var(--danger); }
+.link { background: none; border: none; padding: 0; color: var(--accent); font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.link:disabled { color: var(--muted); cursor: not-allowed; }
+.rowActions { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+.exList { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.exItem { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; border-radius: 12px; background: var(--bg-warm); border: 1px solid var(--line); font-size: 14px; }
+.exForm { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+.exForm label { flex: 1; min-width: 140px; }
+@media (max-width: 760px) {
+  .dayRow { grid-template-columns: 1fr; }
+  .rowActions { flex-direction: row; align-items: center; }
+}

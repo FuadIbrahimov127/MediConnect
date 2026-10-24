@@ -1,0 +1,33 @@
+/* Modul 11 — rəy forması, həkimin rəyləri, moderasiya növbəsi. */
+
+.starField { border: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.starLegend { font-size: 14px; font-weight: 600; color: var(--ink); padding: 0; display: flex; gap: 10px; align-items: baseline; }
+.clear { background: none; border: none; padding: 0; color: var(--muted); font-size: 12px; cursor: pointer; text-decoration: underline; }
+.starRow { display: flex; align-items: center; gap: 2px; line-height: 1; }
+.starLabel { cursor: pointer; padding: 2px; border-radius: 6px; }
+.starLabel:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+.on { color: var(--accent); }
+.off { color: var(--line); }
+.starLabel:hover .off { color: var(--accent-soft); }
+.starText { font-size: 13px; color: var(--muted); margin-left: 10px; }
+.subGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+
+.form { display: flex; flex-direction: column; gap: 18px; }
+.head { display: flex; gap: 14px; align-items: center; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.status { padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg-warm); display: flex; flex-direction: column; gap: 6px; }
+
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+.itemHead { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: flex-start; }
+.meta { font-size: 13px; color: var(--muted); }
+.text { margin: 0; font-size: 15px; line-height: 1.6; color: var(--ink-soft); white-space: pre-wrap; overflow-wrap: anywhere; }
+.flags { display: flex; gap: 6px; flex-wrap: wrap; }
+.diff { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.diff > div { padding: 10px 12px; border-radius: 10px; background: var(--bg-warm); font-size: 14px; }
+.report { padding: 10px 12px; border-radius: 10px; background: var(--warning-soft); font-size: 14px; }
+.replyBox { margin-top: 4px; padding: 10px 14px; border-left: 3px solid var(--accent); background: var(--bg-warm); border-radius: 0 12px 12px 0; font-size: 14px; color: var(--ink-soft); }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; border-top: 1px solid var(--line); padding-top: 10px; }
+.select { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); }
+
+@media (max-width: 620px) {
+  .subGrid, .diff { grid-template-columns: 1fr; }
+}

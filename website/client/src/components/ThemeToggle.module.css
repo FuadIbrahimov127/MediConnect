@@ -1,0 +1,35 @@
+.group { --size: 30px; display: inline-flex; padding: 3px; gap: 2px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
+.btn { position: relative; z-index: 1; width: var(--size); height: var(--size); border-radius: 999px; border: none; background: none; color: var(--muted); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; transition: color .25s ease; }
+.btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .45s cubic-bezier(.34, 1.56, .64, 1); }
+.btn:hover { color: var(--ink); }
+.btn:active svg { transform: scale(.85); }
+.btn[aria-checked='true'] { background: var(--ink); color: var(--bg-warm); }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Rəng rejimi: seçilmiş fon ayrıca "pill"-dir və düymələr arasında sürüşür; seçilən ikon fırlanır. */
+.slider { position: relative; }
+.slider .btn[aria-checked='true'] { background: none; }
+.slider .btn[aria-checked='true'] svg { transform: rotate(360deg); }
+.indicator {
+  position: absolute; top: 3px; left: 3px; width: var(--w, var(--size)); height: var(--size); border-radius: 999px; background: var(--ink);
+  transform: translateX(calc(var(--i, 0) * (var(--w, var(--size)) + 2px)));
+  transition: transform .35s cubic-bezier(.34, 1.4, .64, 1), background-color .25s ease;
+}
+
+/* Dil seçicisi: mətnli düymələr (eni avtomatik). */
+.text { width: auto; padding: 0 8px; font-size: 11px; font-weight: 700; letter-spacing: .03em; }
+/* Dil seçicisində bütün düymələr eyni enlidir ki, pill dəqiq sürüşsün; seçilən hərflər kiçik "sıçrayış" edir. */
+.lang { --w: 34px; }
+.lang .text { width: var(--w); padding: 0; transition: color .25s ease, transform .35s cubic-bezier(.34, 1.56, .64, 1); }
+.lang .text[aria-checked='true'] { transform: scale(1.08); }
+.lang .text:active { transform: scale(.9); }
+
+@media (max-width: 620px) {
+  .group { --size: 26px; }
+  .lang { --w: 30px; }
+  .btn svg { width: 14px; height: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .indicator, .btn, .btn svg, .lang .text { transition: none; }
+  .lang .text[aria-checked='true'], .lang .text:active { transform: none; }
+}
